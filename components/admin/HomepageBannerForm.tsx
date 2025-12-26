@@ -89,7 +89,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="bg-[#252830] rounded-lg p-6 space-y-4 border border-gray-800">
       <div>
         <label className="block text-gray-400 mb-2">Başlık *</label>
         <input

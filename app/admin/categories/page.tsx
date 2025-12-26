@@ -48,13 +48,13 @@ export default async function AdminCategoriesPage() {
             Bir hata oluştu: {error.message}
           </div>
         ) : !categoriesWithCount || categoriesWithCount.length === 0 ? (
-          <div className="bg-gray-800 rounded-lg p-8 text-center">
+          <div className="bg-[#252830] rounded-lg p-8 text-center border border-gray-800">
             <p className="text-gray-400 text-lg mb-4">Henüz kategori bulunmamaktadır.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categoriesWithCount.map((category: any) => (
-              <div key={category.id} className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-green-500 transition-colors">
+              <div key={category.id} className="bg-[#252830] rounded-lg overflow-hidden border border-gray-800 hover:border-green-500 transition-colors">
                 {/* Görsel */}
                 <div className="relative aspect-[4/3] bg-gray-700 overflow-hidden">
                   {category.image_url ? (

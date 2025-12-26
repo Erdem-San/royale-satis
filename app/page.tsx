@@ -43,10 +43,14 @@ export default async function HomePage() {
         <div className="relative w-full h-[200px] md:h-[240px] rounded-lg overflow-hidden mb-6 shadow-2xl">
           {/* Background Image */}
           {homepageBanner?.banner_url ? (
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${homepageBanner.banner_url})` }}
-            />
+            <>
+              <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${homepageBanner.banner_url})` }}
+              />
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black/10"></div>
+            </>
           ) : (
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-[#1F2228] to-gray-900 border border-gray-800"></div>
           )}

@@ -34,7 +34,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   // Banner gradient renkleri kategoriye göre
   const bannerGradient = slug === 'metin2'
     ? 'from-yellow-900 via-yellow-800 to-gray-900'
-    : 'from-blue-900 via-blue-800 to-gray-900'
+    : 'from-green-900 via-green-800 to-gray-900'
 
   // Banner URL varsa onu kullan, yoksa image_url, yoksa gradient
   const bannerImage = category.banner_url || category.image_url
@@ -79,7 +79,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           */}
           <div className="relative h-full flex items-center justify-center z-10">
             {/* Optional: We can put a big stylistic logo text inside if we want, like the homepage */}
-            <h1 className="text-4xl font-black text-white tracking-[0.2em] opacity-20 select-none uppercase">
+            <h1 className="text-4xl font-black text-white tracking-[0.2em] opacity-30 select-none uppercase">
               {category.name}
             </h1>
           </div>

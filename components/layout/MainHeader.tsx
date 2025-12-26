@@ -59,8 +59,8 @@ export default function MainHeader() {
                             <Link href="/" className="flex items-center gap-2">
                                 <div className="relative flex items-center">
                                     <span className="text-3xl font-black tracking-tighter text-white" style={{ fontFamily: 'Arial Black, sans-serif' }}>
-                                        <span className="text-[#3b82f6]">Royale</span>
-                                        <span className="text-white">Satış</span>
+                                        <span className="text-green-500 italic">Dio</span>
+                                        <span className="text-white italic">pazar</span>
                                     </span>
                                 </div>
                             </Link>

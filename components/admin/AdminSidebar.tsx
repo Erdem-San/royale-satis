@@ -92,55 +92,77 @@ export default function AdminSidebar() {
   }
 
   return (
-    <aside className="w-64 bg-gray-800 min-h-screen border-r border-gray-700">
-      <div className="p-6">
-        {/* Kullanıcı Profili */}
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              {loading ? (
-                <div className="h-4 bg-gray-700 rounded animate-pulse"></div>
-              ) : (
-                <p className="text-white font-semibold">
-                  {user?.email?.split('@')[0] || 'Admin'}
-                </p>
-              )}
-              <p className="text-xs text-gray-400 mt-1">Yönetici</p>
-            </div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm transition-colors"
-          >
-            Çıkış Yap
-          </button>
+    <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-[#1F2125] border-r border-gray-700/50">
+      <div className="flex flex-col h-full">
+        {/* Logo */}
+        
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-700/50">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="relative flex items-center">
+                  <span className="text-2xl font-black tracking-tighter text-white" style={{ fontFamily: 'Arial Black, sans-serif' }}>
+                      <span className="text-[#3b82f6]">Dio</span>                      
+                      <span className="text-white">pazar</span>
+                  </span>
+              </div>
+          </Link>
         </div>
 
-        {/* Menü */}
-        <nav className="space-y-2">
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                   isActive
-                    ? 'bg-green-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    ? 'bg-blue-900/30 text-blue-300 shadow-sm'
+                    : 'text-gray-300 hover:bg-blue-900/20 hover:text-blue-300'
                 }`}
               >
-                {item.icon}
-                <span className="font-medium">{item.label}</span>
+                <span className="mr-3">{item.icon}</span>
+                {item.label}
               </Link>
             )
           })}
         </nav>
+
+        {/* User Section */}
+        <div className="p-4 border-t border-gray-700/50">
+          <div className="flex items-center space-x-3 mb-3 px-2">
+            <div className="flex-shrink-0">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-900 to-sky-900 flex items-center justify-center">
+                <span className="text-blue-300 font-semibold text-sm">
+                  {loading ? 'A' : (user?.email?.charAt(0).toUpperCase() || 'A')}
+                </span>
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              {loading ? (
+                <div className="h-4 bg-gray-700 rounded animate-pulse"></div>
+              ) : (
+                <>
+                  <p className="text-sm font-medium text-gray-100 truncate">
+                    {user?.email?.split('@')[0] || 'Admin'}
+                  </p>
+                  <p className="text-xs text-gray-400 truncate">
+                    Yönetici
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center px-4 py-2 text-sm text-gray-300 rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            <svg className="mr-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Çıkış Yap
+          </button>
+        </div>
       </div>
     </aside>
   )
