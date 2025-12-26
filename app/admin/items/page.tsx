@@ -1,15 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import { isAdmin } from '@/lib/utils/auth'
 import Link from 'next/link'
 
 export default async function AdminItemsPage() {
-  const admin = await isAdmin()
-  
-  if (!admin) {
-    redirect('/')
-  }
-
   const supabase = await createClient()
 
   const { data: items, error } = await supabase
@@ -21,9 +13,8 @@ export default async function AdminItemsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
+    <div>
+      <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-white">Ürün Yönetimi</h1>
           <Link
             href="/admin/items/yeni"
@@ -86,7 +77,6 @@ export default async function AdminItemsPage() {
             </table>
           </div>
         )}
-      </div>
     </div>
   )
 }

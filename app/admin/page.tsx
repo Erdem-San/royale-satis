@@ -1,15 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import { isAdmin } from '@/lib/utils/auth'
 import Link from 'next/link'
 
 export default async function AdminDashboard() {
-  const admin = await isAdmin()
-  
-  if (!admin) {
-    redirect('/')
-  }
-
   const supabase = await createClient()
 
   const [itemsCount, ordersCount, usersCount] = await Promise.all([
@@ -19,9 +11,8 @@ export default async function AdminDashboard() {
   ])
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-white mb-8">Admin Dashboard</h1>
+    <div>
+      <h1 className="text-3xl font-bold text-white mb-8">Admin Dashboard</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Link href="/admin/items" className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors">
@@ -61,9 +52,20 @@ export default async function AdminDashboard() {
             >
               Kullanıcıları Yönet
             </Link>
+            <Link
+              href="/admin/categories"
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
+              Kategorileri Yönet
+            </Link>
+            <Link
+              href="/admin/homepage-banner"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            >
+              Anasayfa Banner
+            </Link>
           </div>
         </div>
-      </div>
     </div>
   )
 }

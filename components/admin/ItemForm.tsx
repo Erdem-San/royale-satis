@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Category } from '@/types/item'
 import Link from 'next/link'
@@ -12,7 +12,9 @@ interface ItemFormProps {
 
 export default function ItemForm({ categories, item }: ItemFormProps) {
   const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [formData, setFormData] = useState({
     name: item?.name || '',
     slug: item?.slug || '',
@@ -23,6 +25,45 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
     image_url: item?.image_url || '',
     stats: item?.stats ? JSON.stringify(item.stats, null, 2) : '',
   })
+
+  const handleFileUpload = async (file: File) => {
+    setUploading(true)
+    try {
+      const formDataUpload = new FormData()
+      formDataUpload.append('file', file)
+
+      const response = await fetch('/api/upload/item', {
+        method: 'POST',
+        body: formDataUpload,
+      })
+
+      const data = await response.json()
+
+      if (data.error) {
+        throw new Error(data.error)
+      }
+
+      setFormData(prev => ({ ...prev, image_url: data.url }))
+      setUploading(false)
+    } catch (error: any) {
+      alert('Resim yükleme hatası: ' + error.message)
+      setUploading(false)
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      handleFileUpload(file)
+    }
+  }
+
+  const handleDeleteImage = () => {
+    setFormData(prev => ({ ...prev, image_url: '' }))
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -147,13 +188,61 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
       </div>
 
       <div>
-        <label className="block text-gray-400 mb-2">Görsel URL</label>
-        <input
-          type="url"
-          value={formData.image_url}
-          onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
-        />
+        <label className="block text-gray-400 mb-2">Ürün Görseli</label>
+        
+        {/* Dosya Yükleme */}
+        <div className="mb-4">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+            id="item-image-upload"
+            disabled={uploading}
+          />
+          <label
+            htmlFor="item-image-upload"
+            className={`inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {uploading ? 'Yükleniyor...' : formData.image_url ? 'Resmi Değiştir' : 'Resim Yükle'}
+          </label>
+          {formData.image_url && (
+            <button
+              type="button"
+              onClick={handleDeleteImage}
+              className="ml-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              Resmi Sil
+            </button>
+          )}
+        </div>
+
+        {/* Manuel URL Girişi (Alternatif) */}
+        <div className="mb-2">
+          <input
+            type="url"
+            value={formData.image_url}
+            onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+            placeholder="Veya resim URL'si yapıştırın"
+          />
+        </div>
+
+        {/* Önizleme */}
+        {formData.image_url && (
+          <div className="mt-4">
+            <p className="text-gray-400 text-sm mb-2">Önizleme:</p>
+            <img
+              src={formData.image_url}
+              alt="Preview"
+              className="w-full h-48 object-cover rounded-lg border border-gray-600"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none'
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <div>

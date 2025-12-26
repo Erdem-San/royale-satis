@@ -22,22 +22,25 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, slug, description, category_id, price, stock, image_url, stats } = body
+    const { title, subtitle, banner_url, is_active } = body
 
-    // Admin client kullan (RLS bypass)
+    // Eğer yeni banner aktifse, diğerlerini pasif yap
     const adminClient = createAdminClient()
+    
+    if (is_active) {
+      await adminClient
+        .from('homepage_banner')
+        .update({ is_active: false })
+        .eq('is_active', true)
+    }
 
     const { data, error } = await adminClient
-      .from('items')
+      .from('homepage_banner')
       .insert({
-        name,
-        slug,
-        description,
-        category_id,
-        price,
-        stock,
-        image_url,
-        stats,
+        title,
+        subtitle,
+        banner_url,
+        is_active,
       })
       .select()
       .single()

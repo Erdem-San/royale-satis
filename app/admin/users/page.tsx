@@ -1,14 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import { isAdmin } from '@/lib/utils/auth'
 
 export default async function AdminUsersPage() {
-  const admin = await isAdmin()
-  
-  if (!admin) {
-    redirect('/')
-  }
-
   const supabase = await createClient()
 
   const { data: profiles, error } = await supabase
@@ -29,9 +21,8 @@ export default async function AdminUsersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-white mb-8">Kullanıcı Yönetimi</h1>
+    <div>
+      <h1 className="text-3xl font-bold text-white mb-8">Kullanıcı Yönetimi</h1>
 
         {error ? (
           <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded">
@@ -88,7 +79,6 @@ export default async function AdminUsersPage() {
             </table>
           </div>
         )}
-      </div>
     </div>
   )
 }

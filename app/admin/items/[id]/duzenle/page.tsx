@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect, notFound } from 'next/navigation'
-import { isAdmin } from '@/lib/utils/auth'
+import { notFound } from 'next/navigation'
 import ItemForm from '@/components/admin/ItemForm'
 
 interface EditItemPageProps {
@@ -8,12 +7,6 @@ interface EditItemPageProps {
 }
 
 export default async function EditItemPage({ params }: EditItemPageProps) {
-  const admin = await isAdmin()
-  
-  if (!admin) {
-    redirect('/')
-  }
-
   const { id } = await params
   const supabase = await createClient()
 
@@ -33,11 +26,9 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
     .order('name')
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-3xl font-bold text-white mb-8">Ürün Düzenle</h1>
-        <ItemForm categories={categories || []} item={item} />
-      </div>
+    <div className="max-w-4xl">
+      <h1 className="text-3xl font-bold text-white mb-8">Ürün Düzenle</h1>
+      <ItemForm categories={categories || []} item={item} />
     </div>
   )
 }

@@ -16,6 +16,7 @@ export interface Database {
           slug: string
           description: string | null
           image_url: string | null
+          banner_url: string | null
           created_at: string
         }
         Insert: {
@@ -24,6 +25,7 @@ export interface Database {
           slug: string
           description?: string | null
           image_url?: string | null
+          banner_url?: string | null
           created_at?: string
         }
         Update: {
@@ -32,7 +34,37 @@ export interface Database {
           slug?: string
           description?: string | null
           image_url?: string | null
+          banner_url?: string | null
           created_at?: string
+        }
+      }
+      homepage_banner: {
+        Row: {
+          id: string
+          title: string
+          subtitle: string | null
+          banner_url: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          subtitle?: string | null
+          banner_url?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          subtitle?: string | null
+          banner_url?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
         }
       }
       items: {

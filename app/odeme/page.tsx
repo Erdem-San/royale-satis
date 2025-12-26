@@ -120,12 +120,12 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
+    <div className="min-h-screen bg-[#1a1b1e] py-8">
       <div className="container mx-auto px-4 max-w-4xl">
         <h1 className="text-3xl font-bold text-white mb-8">Ödeme</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-[#1F2228] rounded-lg p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Sipariş Bilgileri</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

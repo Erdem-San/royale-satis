@@ -57,13 +57,13 @@ export default function PaymentSuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-16">
-      <div className="container mx-auto px-4 max-w-2xl">
-        <div className="bg-gray-800 rounded-lg p-8 text-center">
-          <div className="mb-6">
+    <div className="min-h-screen bg-[#1a1b1e] py-16">
+      <div className="container mx-auto px-4">
+        <div className="bg-[#1F2228] rounded-lg p-8 text-center">
+          <div className="mb-4">
             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-12 h-12 text-white"
+                className="w-10 h-10 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -71,20 +71,20 @@ export default function PaymentSuccessPage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={3}
                   d="M5 13l4 4L19 7"
                 />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">
+            <h1 className="text-3xl font-bold text-white mb-4">
               Ödeme Başarılı!
             </h1>
-            <p className="text-gray-400">
-              Siparişiniz alınmıştır. En kısa sürede işleme alınacaktır.
+            <p className="text-gray-400 mb-8 text-lg">
+              Siparişiniz başarıyla alındı. Sipariş numaranız: <span className="text-white font-mono font-bold">#{orderId}</span>
             </p>
           </div>
 
-          <div className="bg-gray-700 rounded-lg p-6 mb-6 text-left">
+          <div className="bg-[#252830] rounded-lg p-6 mb-6 text-left">
             <h2 className="text-xl font-semibold text-white mb-4">Sipariş Detayları</h2>
             <div className="space-y-2 text-gray-300">
               <div className="flex justify-between">

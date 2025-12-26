@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import AddToCartButton from '@/components/item/AddToCartButton'
 
 interface ItemPageProps {
@@ -10,7 +11,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: item } = await supabase
+  const { data: itemData } = await supabase
     .from('items')
     .select(`
       *,
@@ -19,31 +20,42 @@ export default async function ItemPage({ params }: ItemPageProps) {
     .eq('slug', slug)
     .single()
 
-  if (!item) {
+  if (!itemData) {
     notFound()
   }
 
+  const item = itemData as any
   const stats = item.stats as Record<string, any> | null
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
-      <div className="container mx-auto px-4">
-        <div className="mb-4">
-          <nav className="text-sm text-gray-400">
-            <a href="/" className="hover:text-white">Anasayfa</a>
-            {' > '}
-            <a href={`/kategori/${item.category?.slug}`} className="hover:text-white">
-              {item.category?.name}
-            </a>
-            {' > '}
-            <span className="text-white">{item.name}</span>
-          </nav>
+    <div className="min-h-screen bg-[#1a1b1e]">
+      <div className="container mx-auto px-4 py-4">
+        {/* Breadcrumb - Badges style matching homepage */}
+        <div className="flex items-center gap-2 mb-4 text-[11px] font-bold text-gray-400">
+          <Link href="/" className="px-3 py-1 bg-[#252830] rounded hover:bg-gray-700 hover:text-white transition-colors">
+            Anasayfa
+          </Link>
+          <span className="text-gray-600">&gt;</span>
+          {item.category?.slug ? (
+            <>
+              <Link 
+                href={`/kategori/${item.category.slug}`} 
+                className="px-3 py-1 bg-[#252830] rounded hover:bg-gray-700 hover:text-white transition-colors"
+              >
+                {item.category.name}
+              </Link>
+              <span className="text-gray-600">&gt;</span>
+            </>
+          ) : null}
+          <div className="px-3 py-1 bg-[#252830] rounded text-gray-300">
+            {item.name}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Sol Panel - Item Görseli */}
-          <div className="bg-gray-800 rounded-lg p-6">
-            <div className="aspect-square bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden mb-4">
+          <div className="bg-[#252830] rounded-lg p-6 border border-gray-800">
+            <div className="aspect-square bg-gradient-to-br from-[#252830] to-[#1a1b1e] rounded-lg flex items-center justify-center overflow-hidden">
               {item.image_url ? (
                 <img
                   src={item.image_url}
@@ -57,7 +69,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
           </div>
 
           {/* Sağ Panel - Item Bilgileri */}
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-[#252830] rounded-lg p-6 border border-gray-800">
             <h1 className="text-3xl font-bold text-white mb-4">{item.name}</h1>
             
             {item.description && (

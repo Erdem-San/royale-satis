@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-export async function POST(request: NextRequest) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -22,31 +26,32 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, slug, description, category_id, price, stock, image_url, stats } = body
+    const { name, slug, description, image_url, banner_url } = body
 
     // Admin client kullan (RLS bypass)
     const adminClient = createAdminClient()
 
     const { data, error } = await adminClient
-      .from('items')
-      .insert({
+      .from('categories')
+      .update({
         name,
         slug,
         description,
-        category_id,
-        price,
-        stock,
         image_url,
-        stats,
+        banner_url,
       })
+      .eq('id', id)
       .select()
-      .single()
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 })
     }
 
-    return NextResponse.json({ data })
+    if (!data || data.length === 0) {
+      return NextResponse.json({ error: 'Category not found' }, { status: 404 })
+    }
+
+    return NextResponse.json({ data: data[0] })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function PUT(
   request: NextRequest,
@@ -27,7 +28,10 @@ export async function PUT(
     const body = await request.json()
     const { name, slug, description, category_id, price, stock, image_url, stats } = body
 
-    const { data, error } = await supabase
+    // Admin client kullan (RLS bypass)
+    const adminClient = createAdminClient()
+
+    const { data, error } = await adminClient
       .from('items')
       .update({
         name,
@@ -46,6 +50,10 @@ export async function PUT(
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 })
+    }
+
+    if (!data) {
+      return NextResponse.json({ error: 'Item not found' }, { status: 404 })
     }
 
     return NextResponse.json({ data })
@@ -77,7 +85,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { error } = await supabase
+    // Admin client kullan (RLS bypass)
+    const adminClient = createAdminClient()
+
+    const { error } = await adminClient
       .from('items')
       .delete()
       .eq('id', id)

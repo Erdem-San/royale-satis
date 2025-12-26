@@ -30,7 +30,7 @@ export default function AddToCartButton({ item }: AddToCartButtonProps) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="w-10 h-10 bg-gray-700 text-white rounded hover:bg-gray-600"
+            className="w-10 h-10 bg-gray-700 text-white rounded hover:bg-gray-600 cursor-pointer"
             disabled={quantity <= 1}
           >
             -
@@ -45,7 +45,7 @@ export default function AddToCartButton({ item }: AddToCartButtonProps) {
           />
           <button
             onClick={() => setQuantity(Math.min(item.stock, quantity + 1))}
-            className="w-10 h-10 bg-gray-700 text-white rounded hover:bg-gray-600"
+            className="w-10 h-10 bg-gray-700 text-white rounded hover:bg-gray-600 cursor-pointer"
             disabled={quantity >= item.stock}
           >
             +
@@ -56,7 +56,7 @@ export default function AddToCartButton({ item }: AddToCartButtonProps) {
       <button
         onClick={handleAddToCart}
         disabled={item.stock === 0 || added}
-        className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors ${
+        className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer ${
           item.stock === 0
             ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
             : added
