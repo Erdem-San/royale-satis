@@ -34,7 +34,7 @@ export default function NavigationBarClient() {
         <nav className="flex items-center gap-1 overflow-x-auto no-scrollbar">
           <Link
             href="/"
-            className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide ${isActive('/') ? 'text-white bg-gray-800' : 'text-gray-300 hover:text-white hover:bg-gray-800'
+            className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide ${isActive('/') ? 'text-white bg-gray-700' : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
               }`}
           >
             OYUNLAR
@@ -43,7 +43,7 @@ export default function NavigationBarClient() {
             <Link
               key={category.id}
               href={`/kategori/${category.slug}`}
-              className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide whitespace-nowrap ${isActive(`/kategori/${category.slug}`) ? 'text-white bg-gray-800' : 'text-gray-300 hover:text-white hover:bg-gray-800'
+              className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide whitespace-nowrap ${isActive(`/kategori/${category.slug}`) ? 'text-white bg-gray-700' : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
                 }`}
             >
               {category.name}
@@ -51,7 +51,7 @@ export default function NavigationBarClient() {
           ))}
           <Link
             href="/kampanyalar"
-            className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide relative ${isActive('/kampanyalar') ? 'text-[#a3e635] bg-gray-800' : 'text-[#a3e635] hover:text-white hover:bg-gray-800'
+            className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide relative ${isActive('/kampanyalar') ? 'text-[#a3e635] bg-gray-700' : 'text-[#a3e635] hover:text-white hover:bg-gray-700/50'
               }`}
           >
             KAMPANYALAR

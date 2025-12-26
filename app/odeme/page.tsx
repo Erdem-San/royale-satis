@@ -108,7 +108,7 @@ export default function PaymentPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#1a1b1e] flex items-center justify-center">
         <div className="text-white">Yükleniyor...</div>
       </div>
     )
@@ -121,11 +121,11 @@ export default function PaymentPage() {
 
   return (
     <div className="min-h-screen bg-[#1a1b1e] py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className="container mx-auto px-4 py-4">
         <h1 className="text-3xl font-bold text-white mb-8">Ödeme</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-[#1F2228] rounded-lg p-6">
+          <div className="bg-[#252830] rounded-lg p-6 border border-gray-800">
             <h2 className="text-xl font-semibold text-white mb-4">Sipariş Bilgileri</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -135,7 +135,7 @@ export default function PaymentPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-2 bg-[#1a1b1e] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
                 />
               </div>
 
@@ -146,7 +146,7 @@ export default function PaymentPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-2 bg-[#1a1b1e] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
                 />
               </div>
 
@@ -157,7 +157,7 @@ export default function PaymentPage() {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-2 bg-[#1a1b1e] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
                 />
               </div>
 
@@ -167,7 +167,7 @@ export default function PaymentPage() {
                   required
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-2 bg-[#1a1b1e] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
                   rows={3}
                 />
               </div>
@@ -179,7 +179,7 @@ export default function PaymentPage() {
                   required
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-2 bg-[#1a1b1e] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
                 />
               </div>
 
@@ -193,7 +193,7 @@ export default function PaymentPage() {
             </form>
           </div>
 
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-[#252830] rounded-lg p-6 border border-gray-800">
             <h2 className="text-xl font-semibold text-white mb-4">Sipariş Özeti</h2>
             <div className="space-y-2 mb-4">
               {items.map((cartItem) => (

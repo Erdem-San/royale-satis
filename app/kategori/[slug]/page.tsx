@@ -33,7 +33,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   // Banner gradient renkleri kategoriye göre
   const bannerGradient = slug === 'metin2'
-    ? 'from-purple-900 via-purple-800 to-gray-900'
+    ? 'from-yellow-900 via-yellow-800 to-gray-900'
     : 'from-blue-900 via-blue-800 to-gray-900'
 
   // Banner URL varsa onu kullan, yoksa image_url, yoksa gradient

@@ -52,10 +52,10 @@ export default async function ItemPage({ params }: ItemPageProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           {/* Sol Panel - Item Görseli */}
           <div className="bg-[#252830] rounded-lg p-6 border border-gray-800">
-            <div className="aspect-square bg-gradient-to-br from-[#252830] to-[#1a1b1e] rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="aspect-[4/3.75] bg-gradient-to-br from-[#252830] to-[#1a1b1e] rounded-lg flex items-center justify-center overflow-hidden">
               {item.image_url ? (
                 <img
                   src={item.image_url}
@@ -69,7 +69,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
           </div>
 
           {/* Sağ Panel - Item Bilgileri */}
-          <div className="bg-[#252830] rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#252830] rounded-lg p-6 border border-gray-800 flex flex-col h-full">
             <h1 className="text-3xl font-bold text-white mb-4">{item.name}</h1>
             
             {item.description && (
@@ -107,8 +107,18 @@ export default async function ItemPage({ params }: ItemPageProps) {
               </div>
             </div>
 
-            {/* Sepete Ekle Butonu */}
-            <AddToCartButton item={item} />
+            {/* Sepete Ekle Butonu - Alta yapıştırılmış */}
+            <div className="mt-auto">
+              <AddToCartButton item={item} />
+            </div>
+            <div className="mt-4">
+              <Link
+                href="/odeme"
+                className="w-full block py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer bg-gray-700 text-white hover:bg-gray-600 text-center disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Ödemeye Geç
+              </Link>
+            </div>
           </div>
         </div>
       </div>

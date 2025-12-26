@@ -74,12 +74,13 @@ export default async function HomePage() {
         </div>
 
         {/* Category Cards Grid - 4 Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categories?.map((category) => (
+        <div className="pb-16">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {categories?.map((category) => (
             <Link
               key={category.id}
               href={`/kategori/${category.slug}`}
-              className="group relative aspect-[3/4] overflow-hidden rounded-md bg-gray-800 border border-gray-800 hover:border-gray-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl"
+              className="group relative aspect-[4/4] overflow-hidden rounded-md bg-gray-800 border border-gray-800 hover:border-gray-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl"
             >
               {/* Card Image */}
               {category.image_url ? (
@@ -116,19 +117,20 @@ export default async function HomePage() {
             </Link>
           ))}
 
-          {/* Fallback if no categories (Visualization purpose) */}
-          {(!categories || categories.length === 0) && (
-            <>
-              {['Knight Online', 'Metin2', 'Valorant', 'CS2'].map((name, i) => (
-                <div key={i} className="group relative aspect-[3/4] overflow-hidden rounded-md bg-gray-800 border border-gray-700">
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                    <span className="text-white text-lg font-bold">{name}</span>
+            {/* Fallback if no categories (Visualization purpose) */}
+            {(!categories || categories.length === 0) && (
+              <>
+                {['Knight Online', 'Metin2', 'Valorant', 'CS2'].map((name, i) => (
+                  <div key={i} className="group relative aspect-[3/4] overflow-hidden rounded-md bg-gray-800 border border-gray-700">
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                      <span className="text-white text-lg font-bold">{name}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </>
-          )}
+                ))}
+              </>
+            )}
 
+          </div>
         </div>
       </div>
     </div>

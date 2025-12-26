@@ -64,7 +64,7 @@ export default function MainHeader() {
                                     </span>
                                 </div>
                             </Link>
-                            <span className="hidden xl:block text-xs text-gray-400 max-w-[120px] leading-tight opacity-70 border-l border-gray-700 pl-4">
+                            <span className="hidden xl:block text-xs text-gray-400 max-w-[120px] leading-tight opacity-70 border-l border-gray-600 pl-4">
                                 Türkiye'nin En Büyük Oyuncu Pazarı
                             </span>
                         </div>
@@ -82,7 +82,7 @@ export default function MainHeader() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Oyun Ara..."
-                                    className="w-full h-11 pl-12 pr-4 bg-[#151619] text-gray-200 text-sm rounded-lg border border-gray-700 focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] focus:outline-none transition-all placeholder-gray-600"
+                                    className="w-full h-11 pl-12 pr-4 bg-[#1a1b1e] text-gray-200 text-sm rounded-lg border border-gray-700 focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] focus:outline-none transition-all placeholder-gray-600"
                                 />
                             </div>
                         </form>

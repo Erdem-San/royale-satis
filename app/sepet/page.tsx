@@ -68,7 +68,7 @@ export default function CartPage() {
                 key={cartItem.item.id}
                 className="bg-[#252830] rounded-lg p-6 flex items-center gap-6 border border-gray-800"
               >
-                <div className="w-24 h-24 bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#252830] to-[#1a1b1e] rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {cartItem.item.image_url ? (
                     <img
                       src={cartItem.item.image_url}
@@ -96,14 +96,14 @@ export default function CartPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity - 1)}
-                      className="w-8 h-8 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors"
+                      className="w-8 h-8 bg-gray-700 cursor-pointer text-white rounded hover:bg-gray-600 transition-colors"
                     >
                       -
                     </button>
                     <span className="w-12 text-center text-white">{cartItem.quantity}</span>
                     <button
                       onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity + 1)}
-                      className="w-8 h-8 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-8 h-8 bg-gray-700 cursor-pointer text-white rounded hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={cartItem.quantity >= cartItem.item.stock}
                     >
                       +
@@ -118,7 +118,7 @@ export default function CartPage() {
 
                   <button
                     onClick={() => removeFromCart(cartItem.item.id)}
-                    className="text-red-400 hover:text-red-300 px-2 transition-colors"
+                    className="text-red-400 cursor-pointer hover:text-red-300 px-2 transition-colors"
                   >
                     ✕
                   </button>
@@ -151,14 +151,14 @@ export default function CartPage() {
 
               <button
                 onClick={handleCheckout}
-                className="w-full py-3 px-6 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold mb-2 transition-colors"
+                className="w-full py-3 px-6 bg-green-600 cursor-pointer text-white rounded-lg hover:bg-green-700 font-semibold mb-2 transition-colors"
               >
                 Ödemeye Geç
               </button>
 
               <button
                 onClick={clearCart}
-                className="w-full py-2 px-6 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="w-full py-2 px-6 bg-gray-700 cursor-pointer text-white rounded-lg hover:bg-gray-600 transition-colors"
               >
                 Sepeti Temizle
               </button>

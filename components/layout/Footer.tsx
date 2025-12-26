@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 border-t border-gray-800 mt-auto">
+    <footer className="bg-[#151619] border-t border-gray-700/50 mt-auto">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -30,7 +30,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+        <div className="mt-8 pt-8 border-t border-gray-700/50 text-center text-gray-400">
           <p>&copy; 2025 Royale Satış. Tüm hakları saklıdır.</p>
         </div>
       </div>

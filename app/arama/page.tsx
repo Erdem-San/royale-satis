@@ -32,7 +32,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
+    <div className="min-h-screen bg-[#1a1b1e py-8">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-400 mb-6">

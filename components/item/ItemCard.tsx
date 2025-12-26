@@ -16,7 +16,7 @@ export default function ItemCard({ item }: ItemCardProps) {
       className="group block bg-[#1F2228] border border-gray-700 rounded-lg overflow-hidden hover:border-green-500 transition-all duration-300 transform hover:scale-105"
     >
       {/* Image Section */}
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-[#252830] to-[#1a1b1e] flex items-center justify-center overflow-hidden">
+      <div className="relative aspect-[4/2.5] bg-gradient-to-br from-[#252830] to-[#1a1b1e] flex items-center justify-center overflow-hidden">
         {item.image_url ? (
           <img
             src={item.image_url}
