@@ -1,53 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useCart } from '@/contexts/CartContext'
 
 export default function TopBar() {
-  const [user, setUser] = useState<any>(null)
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
-  const supabase = createClient()
-  const router = useRouter()
-  const { getItemCount } = useCart()
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-
-      if (user) {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('role')
-          .eq('user_id', user.id)
-          .single()
-
-        setIsAdmin((profile as any)?.role === 'admin')
-      }
-
-      setLoading(false)
-    }
-    getUser()
-  }, [supabase])
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
-  }
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      router.push(`/arama?q=${encodeURIComponent(searchQuery.trim())}`)
-    }
-  }
-
   return (
     <div className="flex flex-col w-full">
       {/* Top Strip - Üst ince şerit */}
@@ -60,8 +15,6 @@ export default function TopBar() {
           </div>
         </div>
       </div>
-
     </div>
   )
 }
-

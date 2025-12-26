@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
               className="bg-gradient-to-br from-blue-600/20 to-sky-500/20 rounded-lg p-6 hover:shadow-lg transition-all border border-blue-800 hover:border-blue-500"
             >
               <h2 className="text-lg font-semibold text-gray-300 mb-2">Siparişler</h2>
-              <p className="text-3xl font-bold text-yellow-400">{ordersCount.count || 0}</p>
+              <p className="text-3xl font-bold text-blue-400">{ordersCount.count || 0}</p>
             </Link>
 
             <Link 
@@ -41,7 +41,7 @@ export default async function AdminDashboard() {
               className="bg-gradient-to-br from-orange-600/20 to-amber-500/20 rounded-lg p-6 hover:shadow-lg transition-all border border-orange-800 hover:border-orange-500"
             >
               <h2 className="text-lg font-semibold text-gray-300 mb-2">Kullanıcılar</h2>
-              <p className="text-3xl font-bold text-blue-400">{usersCount.count || 0}</p>
+              <p className="text-3xl font-bold text-orange-400">{usersCount.count || 0}</p>
             </Link>
           </div>
 

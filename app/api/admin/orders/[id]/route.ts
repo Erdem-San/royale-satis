@@ -26,44 +26,39 @@ export async function PUT(
     }
 
     const body = await request.json()
-    const { title, subtitle, banner_url, is_active } = body
+    const { status } = body
 
-    // Eğer yeni banner aktifse, diğerlerini pasif yap
-    const adminClient = createAdminClient()
-    
-    if (is_active) {
-      await adminClient
-        .from('homepage_banner')
-        .update({ is_active: false })
-        .neq('id', id)
-        .eq('is_active', true)
+    if (!status) {
+      return NextResponse.json({ error: 'Status is required' }, { status: 400 })
     }
 
+    // Geçerli durum kontrolü
+    const validStatuses = ['pending', 'processing', 'completed', 'cancelled']
+    if (!validStatuses.includes(status)) {
+      return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+    }
+
+    // Admin client kullan (RLS bypass)
+    const adminClient = createAdminClient()
+
     const { data, error } = await adminClient
-      .from('homepage_banner')
-      .update({
-        title,
-        subtitle,
-        banner_url,
-        is_active,
-        updated_at: new Date().toISOString(),
-      })
+      .from('orders')
+      .update({ status })
       .eq('id', id)
       .select()
+      .single()
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 })
     }
 
-    if (!data || data.length === 0) {
-      return NextResponse.json({ error: 'Banner not found' }, { status: 404 })
+    if (!data) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ data: data[0] })
+    return NextResponse.json({ data })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
-
-
 

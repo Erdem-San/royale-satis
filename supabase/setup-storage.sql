@@ -18,3 +18,4 @@ CREATE POLICY "Public Access" ON storage.objects
 -- Admin yazma yetkisi (service_role key ile yapılacak, burada sadece public read)
 
 
+

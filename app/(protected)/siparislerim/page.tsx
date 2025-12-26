@@ -37,7 +37,7 @@ export default async function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
+    <div className="min-h-screen bg-[#1a1b1e] py-8">
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className="text-3xl font-bold text-white mb-8">Siparişlerim</h1>
 
@@ -46,7 +46,7 @@ export default async function OrdersPage() {
             Bir hata oluştu: {error.message}
           </div>
         ) : !orders || orders.length === 0 ? (
-          <div className="bg-gray-800 rounded-lg p-8 text-center">
+          <div className="bg-[#252830] rounded-lg p-8 text-center">
             <p className="text-gray-400 text-lg mb-4">Henüz siparişiniz bulunmamaktadır.</p>
             <Link
               href="/"
@@ -58,7 +58,7 @@ export default async function OrdersPage() {
         ) : (
           <div className="space-y-4">
             {orders.map((order: any) => (
-              <div key={order.id} className="bg-gray-800 rounded-lg p-6">
+              <div key={order.id} className="bg-[#252830] rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-lg font-semibold text-white">

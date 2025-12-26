@@ -12,11 +12,22 @@ export default function NavigationBarClient() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const { data } = await supabase
-        .from('categories')
-        .select('*')
-        .order('name')
-      if (data) setCategories(data)
+      try {
+        const { data, error } = await supabase
+          .from('categories')
+          .select('*')
+          .order('name')
+
+        if (error) {
+          console.warn('Could not fetch categories:', error)
+          setCategories([])
+        } else if (data) {
+          setCategories(data)
+        }
+      } catch (error) {
+        console.warn('Error fetching categories:', error)
+        setCategories([])
+      }
     }
     fetchCategories()
   }, [supabase])
@@ -51,7 +62,7 @@ export default function NavigationBarClient() {
           ))}
           <Link
             href="/kampanyalar"
-            className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide relative ${isActive('/kampanyalar') ? 'text-[#a3e635] bg-gray-700' : 'text-[#a3e635] hover:text-white hover:bg-gray-700/50'
+            className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide relative ${isActive('/kampanyalar') ? 'text-green-500 bg-gray-700' : 'text-green-400 hover:text-white hover:bg-gray-700/50'
               }`}
           >
             KAMPANYALAR
@@ -61,7 +72,7 @@ export default function NavigationBarClient() {
           </Link>
           <Link
             href="/bakiye-yukle"
-            className={`ml-auto px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide text-[#a3e635] hover:text-[#bef264]`}
+            className={`ml-auto px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide text-green-500 hover:text-green-400`}
           >
             +BAKİYE YÜKLE
           </Link>
@@ -70,4 +81,3 @@ export default function NavigationBarClient() {
     </div>
   )
 }
-

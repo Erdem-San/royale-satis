@@ -20,3 +20,4 @@ CREATE POLICY "Homepage banner is viewable by everyone" ON homepage_banner
   FOR SELECT USING (is_active = true);
 
 
+

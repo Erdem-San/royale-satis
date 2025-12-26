@@ -38,6 +38,13 @@ export default function PaymentPage() {
     getUser()
   }, [supabase, router])
 
+  // Sepet boşsa sepet sayfasına yönlendir
+  useEffect(() => {
+    if (user && items.length === 0) {
+      router.push('/sepet')
+    }
+  }, [user, items.length, router])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (items.length === 0) return
@@ -106,17 +113,12 @@ export default function PaymentPage() {
     }
   }
 
-  if (!user) {
+  if (!user || items.length === 0) {
     return (
       <div className="min-h-screen bg-[#1a1b1e] flex items-center justify-center">
         <div className="text-white">Yükleniyor...</div>
       </div>
     )
-  }
-
-  if (items.length === 0) {
-    router.push('/sepet')
-    return null
   }
 
   return (

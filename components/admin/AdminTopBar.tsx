@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -16,7 +16,6 @@ interface Notification {
 
 export default function AdminTopBar() {
   const router = useRouter()
-  const supabase = createClient()
   const [user, setUser] = useState<any>(null)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
@@ -26,10 +25,107 @@ export default function AdminTopBar() {
   const notifRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
 
+  const fetchNotifications = useCallback(async () => {
+    if (loadingNotifications) return
+    setLoadingNotifications(true)
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10)
+
+      if (error) {
+        // Tablo yoksa veya RLS hatası varsa sessizce devam et
+        const errorMessage = error.message?.toLowerCase() || ''
+        const isTableNotFound = 
+          error.code === 'PGRST116' || 
+          error.code === '42P01' ||
+          errorMessage.includes('could not find the table') ||
+          errorMessage.includes('table') && errorMessage.includes('not found') ||
+          errorMessage.includes('does not exist')
+        
+        if (isTableNotFound) {
+          // Tablo bulunamadı - sessizce devam et
+          setNotifications([])
+          return
+        }
+        throw error
+      }
+      setNotifications(data || [])
+    } catch (error: any) {
+      // Tablo yoksa sessizce devam et
+      const errorMessage = error?.message?.toLowerCase() || ''
+      const isTableNotFound = 
+        errorMessage.includes('could not find the table') ||
+        errorMessage.includes('table') && errorMessage.includes('not found') ||
+        errorMessage.includes('does not exist')
+      
+      if (!isTableNotFound) {
+        // Sadece tablo dışı hataları logla
+        console.error('Failed to fetch notifications:', error?.message || error)
+      }
+      setNotifications([])
+    } finally {
+      setLoadingNotifications(false)
+    }
+  }, [loadingNotifications])
+
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const supabase = createClient()
+      const { count, error } = await supabase
+        .from('notifications')
+        .select('*', { count: 'exact', head: true })
+        .is('read_at', null)
+
+      if (error) {
+        // Tablo yoksa veya RLS hatası varsa sessizce devam et
+        const errorMessage = error.message?.toLowerCase() || ''
+        const isTableNotFound = 
+          error.code === 'PGRST116' || 
+          error.code === '42P01' ||
+          errorMessage.includes('could not find the table') ||
+          errorMessage.includes('table') && errorMessage.includes('not found') ||
+          errorMessage.includes('does not exist')
+        
+        if (isTableNotFound) {
+          setUnreadCount(0)
+          return
+        }
+        throw error
+      }
+      setUnreadCount(count || 0)
+    } catch (error: any) {
+      // Tablo yoksa sessizce devam et
+      const errorMessage = error?.message?.toLowerCase() || ''
+      const isTableNotFound = 
+        errorMessage.includes('could not find the table') ||
+        errorMessage.includes('table') && errorMessage.includes('not found') ||
+        errorMessage.includes('does not exist')
+      
+      if (!isTableNotFound) {
+        // Sadece tablo dışı hataları logla
+        console.error('Failed to fetch unread count:', error?.message || error)
+      }
+      setUnreadCount(0)
+    }
+  }, [])
+
   useEffect(() => {
+    let mounted = true
+    const supabase = createClient()
+
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (mounted) {
+          setUser(user)
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error)
+      }
     }
     getUser()
 
@@ -66,71 +162,83 @@ export default function AdminTopBar() {
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
+      mounted = false
       document.removeEventListener('mousedown', handleClickOutside)
       channel.unsubscribe()
     }
-  }, [supabase])
-
-  const fetchNotifications = async () => {
-    if (loadingNotifications) return
-    setLoadingNotifications(true)
-    try {
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10)
-
-      if (error) throw error
-      setNotifications(data || [])
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error)
-    } finally {
-      setLoadingNotifications(false)
-    }
-  }
-
-  const fetchUnreadCount = async () => {
-    try {
-      const { count, error } = await supabase
-        .from('notifications')
-        .select('*', { count: 'exact', head: true })
-        .is('read_at', null)
-
-      if (error) throw error
-      setUnreadCount(count || 0)
-    } catch (error) {
-      console.error('Failed to fetch unread count:', error)
-    }
-  }
+  }, [fetchNotifications, fetchUnreadCount])
 
   const handleMarkAsRead = async (id: string) => {
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('notifications')
         .update({ read_at: new Date().toISOString() })
         .eq('id', id)
 
-      if (error) throw error
+      if (error) {
+        const errorMessage = error.message?.toLowerCase() || ''
+        const isTableNotFound = 
+          error.code === 'PGRST116' || 
+          error.code === '42P01' ||
+          errorMessage.includes('could not find the table') ||
+          errorMessage.includes('table') && errorMessage.includes('not found') ||
+          errorMessage.includes('does not exist')
+        
+        if (isTableNotFound) {
+          return
+        }
+        throw error
+      }
       fetchNotifications()
       fetchUnreadCount()
-    } catch (error) {
-      console.error('Failed to mark notification as read:', error)
+    } catch (error: any) {
+      const errorMessage = error?.message?.toLowerCase() || ''
+      const isTableNotFound = 
+        errorMessage.includes('could not find the table') ||
+        errorMessage.includes('table') && errorMessage.includes('not found') ||
+        errorMessage.includes('does not exist')
+      
+      if (!isTableNotFound) {
+        console.error('Failed to mark notification as read:', error?.message || error)
+      }
     }
   }
 
   const handleMarkAllAsRead = async () => {
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('notifications')
         .update({ read_at: new Date().toISOString() })
         .is('read_at', null)
 
-      if (error) throw error
+      if (error) {
+        const errorMessage = error.message?.toLowerCase() || ''
+        const isTableNotFound = 
+          error.code === 'PGRST116' || 
+          error.code === '42P01' ||
+          errorMessage.includes('could not find the table') ||
+          errorMessage.includes('table') && errorMessage.includes('not found') ||
+          errorMessage.includes('does not exist')
+        
+        if (isTableNotFound) {
+          return
+        }
+        throw error
+      }
       fetchNotifications()
       fetchUnreadCount()
-    } catch (error) {
-      console.error('Failed to mark all as read:', error)
+    } catch (error: any) {
+      const errorMessage = error?.message?.toLowerCase() || ''
+      const isTableNotFound = 
+        errorMessage.includes('could not find the table') ||
+        errorMessage.includes('table') && errorMessage.includes('not found') ||
+        errorMessage.includes('does not exist')
+      
+      if (!isTableNotFound) {
+        console.error('Failed to mark all as read:', error?.message || error)
+      }
     }
   }
 
@@ -145,6 +253,7 @@ export default function AdminTopBar() {
   }
 
   const handleLogout = async () => {
+    const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/')
     router.refresh()
