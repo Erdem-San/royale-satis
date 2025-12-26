@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Royale Satış - Epin Sitesi
 
-## Getting Started
+Metin2 ve Royale Online için item ve yang satış platformu. Next.js, Supabase ve Tailwind CSS ile geliştirilmiştir.
 
-First, run the development server:
+## Özellikler
+
+- ✅ Kullanıcı giriş/kayıt sistemi
+- ✅ Kategori bazlı ürün listeleme (Metin2, Royale Online)
+- ✅ Ürün detay sayfaları
+- ✅ Sepet sistemi
+- ✅ Ödeme akışı (İyzico dummy entegrasyonu)
+- ✅ Kullanıcı paneli (Siparişlerim, Profil)
+- ✅ Admin paneli (Ürün, Sipariş, Kullanıcı yönetimi)
+
+## Kurulum
+
+### 1. Bağımlılıkları Yükleyin
+
+```bash
+npm install
+```
+
+### 2. Environment Variables
+
+`.env.local` dosyası oluşturun:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://gloccxayifghbiilgzbo.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_ANON_KEY_HERE
+SUPABASE_SERVICE_ROLE_KEY=sb_secret_C7k0gYjrxdUgcu-u0STS9A_QvzZwb5V
+
+# İyzico Dummy Keys
+IYZICO_API_KEY=YOUR_IYZICO_API_KEY
+IYZICO_SECRET_KEY=YOUR_IYZICO_SECRET_KEY
+IYZICO_BASE_URL=https://sandbox-api.iyzipay.com
+```
+
+### 3. Supabase Database Kurulumu
+
+Supabase dashboard'da SQL Editor'ü açın ve `supabase/schema.sql` dosyasındaki SQL'i çalıştırın.
+
+### 4. Development Server'ı Başlatın
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açın.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Proje Yapısı
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+/app
+  /(auth)          # Giriş/Kayıt sayfaları
+  /(public)        # Public sayfalar
+  /(protected)    # Kullanıcı sayfaları
+  /admin           # Admin paneli
+  /api             # API routes
+/components        # React componentleri
+/contexts          # Context providers
+/lib               # Utility fonksiyonları
+/types             # TypeScript type tanımları
+/supabase          # Database şeması
+```
 
-## Learn More
+## Kullanım
 
-To learn more about Next.js, take a look at the following resources:
+### Admin Kullanıcı Oluşturma
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Supabase SQL Editor'de:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```sql
+-- Kullanıcı ID'sini değiştirin
+UPDATE user_profiles 
+SET role = 'admin' 
+WHERE user_id = 'USER_ID_HERE';
+```
 
-## Deploy on Vercel
+### İlk Kategoriler
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Database şeması çalıştırıldığında Metin2 ve Royale Online kategorileri otomatik olarak oluşturulur.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Teknolojiler
+
+- **Next.js 16** - React framework
+- **Supabase** - Backend (Auth + Database)
+- **Tailwind CSS** - Styling
+- **İyzico** - Ödeme entegrasyonu (Dummy)
+
+## Notlar
+
+- İyzico entegrasyonu şu an dummy modda çalışmaktadır
+- Gerçek ödeme için İyzico API key'lerini `.env.local` dosyasına eklemeniz gerekmektedir
+- Supabase Anon Key'i `.env.local` dosyasına eklemeyi unutmayın
