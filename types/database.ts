@@ -188,6 +188,38 @@ export interface Database {
           phone?: string | null
           created_at?: string
         }
+      },
+      notifications: {
+        Row: {
+          id: string
+          type: string
+          title: string
+          message: string | null
+          order_id: string | null
+          read_at: string | null
+          user_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          type: string
+          title: string
+          message?: string | null
+          order_id?: string | null
+          read_at?: string | null
+          user_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          type?: string
+          title?: string
+          message?: string | null
+          order_id?: string | null
+          read_at?: string | null
+          user_id?: string | null
+          created_at?: string
+        }
       }
     }
   }

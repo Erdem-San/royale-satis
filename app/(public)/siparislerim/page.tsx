@@ -63,6 +63,7 @@ export default async function OrdersPage() {
                   <div className="flex items-center gap-2 mb-2">
                     {order.order_items?.map((orderItem: any) => (
                       <img
+                        key={orderItem.id}
                         src={orderItem.item.image_url}
                         alt={orderItem.item.name}
                         className="w-16 h-16 object-cover rounded-lg"

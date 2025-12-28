@@ -22,11 +22,19 @@ export default function AdminTopBar() {
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [loadingNotifications, setLoadingNotifications] = useState(false)
+  // State'i localStorage'dan veya true olarak başlat
+  const [tableExists, setTableExists] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem('notifications_table_exists')
+      return cached !== 'false'
+    }
+    return true
+  })
   const notifRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   const fetchNotifications = useCallback(async () => {
-    if (loadingNotifications) return
+    if (loadingNotifications || !tableExists) return false
     setLoadingNotifications(true)
     try {
       const supabase = createClient()
@@ -37,42 +45,52 @@ export default function AdminTopBar() {
         .limit(10)
 
       if (error) {
-        // Tablo yoksa veya RLS hatası varsa sessizce devam et
         const errorMessage = error.message?.toLowerCase() || ''
-        const isTableNotFound = 
-          error.code === 'PGRST116' || 
+        const isTableNotFound =
+          error.code === 'PGRST116' ||
           error.code === '42P01' ||
           errorMessage.includes('could not find the table') ||
           errorMessage.includes('table') && errorMessage.includes('not found') ||
-          errorMessage.includes('does not exist')
-        
+          errorMessage.includes('does not exist') ||
+          error.code === '404'
+
         if (isTableNotFound) {
-          // Tablo bulunamadı - sessizce devam et
+          setTableExists(false)
+          localStorage.setItem('notifications_table_exists', 'false')
           setNotifications([])
-          return
+          return false
         }
         throw error
       }
       setNotifications(data || [])
+      return true
     } catch (error: any) {
-      // Tablo yoksa sessizce devam et
       const errorMessage = error?.message?.toLowerCase() || ''
-      const isTableNotFound = 
+      const isTableNotFound =
         errorMessage.includes('could not find the table') ||
         errorMessage.includes('table') && errorMessage.includes('not found') ||
-        errorMessage.includes('does not exist')
-      
+        errorMessage.includes('does not exist') ||
+        (error?.status === 404)
+
+      if (isTableNotFound) {
+        setTableExists(false)
+        localStorage.setItem('notifications_table_exists', 'false')
+        setNotifications([])
+        return false
+      }
+
       if (!isTableNotFound) {
-        // Sadece tablo dışı hataları logla
         console.error('Failed to fetch notifications:', error?.message || error)
       }
       setNotifications([])
+      return false
     } finally {
       setLoadingNotifications(false)
     }
-  }, [loadingNotifications])
+  }, [loadingNotifications, tableExists])
 
   const fetchUnreadCount = useCallback(async () => {
+    if (!tableExists) return
     try {
       const supabase = createClient()
       const { count, error } = await supabase
@@ -81,16 +99,18 @@ export default function AdminTopBar() {
         .is('read_at', null)
 
       if (error) {
-        // Tablo yoksa veya RLS hatası varsa sessizce devam et
         const errorMessage = error.message?.toLowerCase() || ''
-        const isTableNotFound = 
-          error.code === 'PGRST116' || 
+        const isTableNotFound =
+          error.code === 'PGRST116' ||
           error.code === '42P01' ||
           errorMessage.includes('could not find the table') ||
           errorMessage.includes('table') && errorMessage.includes('not found') ||
-          errorMessage.includes('does not exist')
-        
+          errorMessage.includes('does not exist') ||
+          error.code === '404'
+
         if (isTableNotFound) {
+          setTableExists(false)
+          localStorage.setItem('notifications_table_exists', 'false')
           setUnreadCount(0)
           return
         }
@@ -98,24 +118,31 @@ export default function AdminTopBar() {
       }
       setUnreadCount(count || 0)
     } catch (error: any) {
-      // Tablo yoksa sessizce devam et
       const errorMessage = error?.message?.toLowerCase() || ''
-      const isTableNotFound = 
+      const isTableNotFound =
         errorMessage.includes('could not find the table') ||
         errorMessage.includes('table') && errorMessage.includes('not found') ||
-        errorMessage.includes('does not exist')
-      
+        errorMessage.includes('does not exist') ||
+        (error?.status === 404)
+
+      if (isTableNotFound) {
+        setTableExists(false)
+        localStorage.setItem('notifications_table_exists', 'false')
+        setUnreadCount(0)
+        return
+      }
+
       if (!isTableNotFound) {
-        // Sadece tablo dışı hataları logla
         console.error('Failed to fetch unread count:', error?.message || error)
       }
       setUnreadCount(0)
     }
-  }, [])
+  }, [tableExists])
 
   useEffect(() => {
     let mounted = true
     const supabase = createClient()
+    let channel: any = null
 
     const getUser = async () => {
       try {
@@ -129,26 +156,37 @@ export default function AdminTopBar() {
     }
     getUser()
 
-    // Fetch notifications
-    fetchNotifications()
-    fetchUnreadCount()
+    // Initialize notifications and subscription sequentially
+    const initNotifications = async () => {
+      if (!tableExists) return
 
-    // Set up real-time subscription for new notifications
-    const channel = supabase
-      .channel('notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-        },
-        () => {
-          fetchNotifications()
-          fetchUnreadCount()
-        }
-      )
-      .subscribe()
+      // Try fetching notifications first
+      const exists = await fetchNotifications()
+
+      // Only proceed if table exists
+      if (exists && mounted) {
+        await fetchUnreadCount()
+
+        // Setup subscription
+        channel = supabase
+          .channel('notifications')
+          .on(
+            'postgres_changes',
+            {
+              event: 'INSERT',
+              schema: 'public',
+              table: 'notifications',
+            },
+            () => {
+              fetchNotifications()
+              fetchUnreadCount()
+            }
+          )
+          .subscribe()
+      }
+    }
+
+    initNotifications()
 
     // Close dropdowns when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
@@ -164,7 +202,9 @@ export default function AdminTopBar() {
     return () => {
       mounted = false
       document.removeEventListener('mousedown', handleClickOutside)
-      channel.unsubscribe()
+      if (channel) {
+        channel.unsubscribe()
+      }
     }
   }, [fetchNotifications, fetchUnreadCount])
 
@@ -178,13 +218,13 @@ export default function AdminTopBar() {
 
       if (error) {
         const errorMessage = error.message?.toLowerCase() || ''
-        const isTableNotFound = 
-          error.code === 'PGRST116' || 
+        const isTableNotFound =
+          error.code === 'PGRST116' ||
           error.code === '42P01' ||
           errorMessage.includes('could not find the table') ||
           errorMessage.includes('table') && errorMessage.includes('not found') ||
           errorMessage.includes('does not exist')
-        
+
         if (isTableNotFound) {
           return
         }
@@ -194,11 +234,11 @@ export default function AdminTopBar() {
       fetchUnreadCount()
     } catch (error: any) {
       const errorMessage = error?.message?.toLowerCase() || ''
-      const isTableNotFound = 
+      const isTableNotFound =
         errorMessage.includes('could not find the table') ||
         errorMessage.includes('table') && errorMessage.includes('not found') ||
         errorMessage.includes('does not exist')
-      
+
       if (!isTableNotFound) {
         console.error('Failed to mark notification as read:', error?.message || error)
       }
@@ -215,13 +255,13 @@ export default function AdminTopBar() {
 
       if (error) {
         const errorMessage = error.message?.toLowerCase() || ''
-        const isTableNotFound = 
-          error.code === 'PGRST116' || 
+        const isTableNotFound =
+          error.code === 'PGRST116' ||
           error.code === '42P01' ||
           errorMessage.includes('could not find the table') ||
           errorMessage.includes('table') && errorMessage.includes('not found') ||
           errorMessage.includes('does not exist')
-        
+
         if (isTableNotFound) {
           return
         }
@@ -231,11 +271,11 @@ export default function AdminTopBar() {
       fetchUnreadCount()
     } catch (error: any) {
       const errorMessage = error?.message?.toLowerCase() || ''
-      const isTableNotFound = 
+      const isTableNotFound =
         errorMessage.includes('could not find the table') ||
         errorMessage.includes('table') && errorMessage.includes('not found') ||
         errorMessage.includes('does not exist')
-      
+
       if (!isTableNotFound) {
         console.error('Failed to mark all as read:', error?.message || error)
       }
@@ -314,9 +354,8 @@ export default function AdminTopBar() {
                     notifications.map((notification) => (
                       <div
                         key={notification.id}
-                        className={`p-4 border-b border-gray-700/50 hover:bg-gray-700 cursor-pointer ${
-                          !notification.read_at ? 'bg-blue-900/20' : ''
-                        }`}
+                        className={`p-4 border-b border-gray-700/50 hover:bg-gray-700 cursor-pointer ${!notification.read_at ? 'bg-blue-900/20' : ''
+                          }`}
                         onClick={() => handleNotificationClick(notification)}
                       >
                         <div className="flex items-start justify-between">
