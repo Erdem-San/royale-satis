@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ItemCard from '@/components/item/ItemCard'
-import { Suspense } from 'react'
 
-async function HomePageContent() {
+export default async function HomePage() {
   const supabase = await createClient()
 
   const { data: categoriesData } = await supabase
@@ -175,17 +174,5 @@ async function HomePageContent() {
         )}
       </div>
     </div>
-  )
-}
-
-export default function HomePage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-[#1a1b1e] flex items-center justify-center">
-        <div className="text-white text-xl">Yükleniyor...</div>
-      </div>
-    }>
-      <HomePageContent />
-    </Suspense>
   )
 }
