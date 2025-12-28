@@ -28,11 +28,11 @@ export default async function OrdersPage() {
       case 'completed':
         return 'text-green-400'
       case 'processing':
-        return 'text-yellow-400'
+        return 'text-orange-400'
       case 'cancelled':
         return 'text-red-400'
       default:
-        return 'text-gray-400'
+        return 'text-yellow-400'
     }
   }
 
@@ -60,19 +60,28 @@ export default async function OrdersPage() {
             {orders.map((order: any) => (
               <div key={order.id} className="bg-[#252830] rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">
-                      Sipariş #{order.id.slice(0, 8).toUpperCase()}
-                    </h3>
-                    <p className="text-sm text-gray-400">
-                      {new Date(order.created_at).toLocaleDateString('tr-TR', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
+                  <div className="flex items-center gap-2 mb-2">
+                    {order.order_items?.map((orderItem: any) => (
+                      <img
+                        src={orderItem.item.image_url}
+                        alt={orderItem.item.name}
+                        className="w-16 h-16 object-cover rounded-lg"
+                      />
+                    ))}
+                    <div className="flex flex-col">
+                      <h3 className="text-lg font-semibold text-white">
+                        Sipariş #{order.id.slice(0, 8).toUpperCase()}
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        {new Date(order.created_at).toLocaleDateString('tr-TR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    </div>
                   </div>
                   <div className="text-right">
                     <p className={`text-lg font-semibold ${getStatusColor(order.status)}`}>

@@ -39,7 +39,7 @@ export default function OrderDetailPage() {
   const params = useParams()
   const orderId = params.id as string
   const supabase = createClient()
-  
+
   const [order, setOrder] = useState<Order | null>(null)
   const [userOrders, setUserOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
@@ -54,7 +54,7 @@ export default function OrderDetailPage() {
   const fetchOrderDetails = async () => {
     try {
       setLoading(true)
-      
+
       // Sipariş detaylarını çek
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
@@ -102,7 +102,7 @@ export default function OrderDetailPage() {
       } catch (error) {
         console.warn('Could not fetch user email:', error)
       }
-      
+
       const orderWithUser = {
         ...orderData,
         user: {
@@ -133,13 +133,13 @@ export default function OrderDetailPage() {
 
   const updateOrderStatus = async (status: string) => {
     if (!order) return
-    
+
     try {
       setUpdating(true)
-      
+
       // State'i anında güncelle (optimistic update)
       setOrder(prevOrder => prevOrder ? { ...prevOrder, status } : null)
-      setUserOrders(prevOrders => 
+      setUserOrders(prevOrders =>
         prevOrders.map(o => o.id === order.id ? { ...o, status } : o)
       )
 
@@ -157,7 +157,7 @@ export default function OrderDetailPage() {
       if (!response.ok) {
         throw new Error(data.error || 'Güncelleme başarısız')
       }
-      
+
       // Siparişi yeniden yükle (veritabanından güncel veriyi al)
       await fetchOrderDetails()
     } catch (error) {
@@ -298,7 +298,7 @@ export default function OrderDetailPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-gray-400">Toplam Tutar</p>

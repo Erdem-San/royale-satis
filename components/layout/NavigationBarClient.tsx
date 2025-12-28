@@ -40,7 +40,7 @@ export default function NavigationBarClient({ initialCategories }: NavigationBar
                     ))}
                     <Link
                         href="/"
-                        className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide relative ${isActive('/kampanyalar') ? 'text-green-500 bg-gray-700' : 'text-green-400 hover:text-white hover:bg-gray-700/50'
+                        className={`px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide relative ${isActive('/kampanyalar') ? 'text-green-500 bg-gray-700' : 'text-green-500 hover:text-white hover:bg-gray-700/50'
                             }`}
                     >
                         KAMPANYALAR
