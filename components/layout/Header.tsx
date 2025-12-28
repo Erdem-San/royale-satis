@@ -25,14 +25,19 @@ export default async function Header() {
             .select('role')
             .eq('user_id', user.id)
             .single()
-        isAdmin = profile?.role === 'admin'
+        const userProfile = profile as any
+        isAdmin = userProfile?.role === 'admin'
     }
 
     return (
         <header className="sticky top-0 z-50">
             <TopBar />
             <Suspense fallback={<div className="bg-[#252830] h-16"></div>}>
-                <MainHeaderClient initialUser={user} initialIsAdmin={isAdmin} />
+                <MainHeaderClient
+                    key={user?.id || 'guest'}
+                    initialUser={user}
+                    initialIsAdmin={isAdmin}
+                />
             </Suspense>
             <Suspense fallback={<div className="bg-[#252830] h-12"></div>}>
                 <NavigationBarClient initialCategories={categories} />

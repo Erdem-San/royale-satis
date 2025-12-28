@@ -44,35 +44,46 @@ export function UpdatePasswordForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-          <CardDescription>
-            Please enter your new password below.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleForgotPassword}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="password">New password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="New password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save new password"}
-              </Button>
+      <div className="bg-[#121212] border border-green-600 rounded-2xl p-8 shadow-2xl shadow-black/80 relative overflow-hidden w-[420px]">
+        {/* Decorative corner glow */}
+        <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-600/40 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="mb-8 text-center space-y-2">
+          <h1 className="text-3xl font-bold text-green-600 tracking-tight">Yeni Şifre Belirle</h1>
+          <p className="text-gray-400 text-sm">
+            Lütfen yeni şifrenizi aşağıya girin.
+          </p>
+        </div>
+
+        <form onSubmit={handleForgotPassword} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-gray-300 font-medium">Yeni Şifre</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Yeni şifreniz"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="bg-[#1E1E1E] border-transparent focus:border-green-600 text-white placeholder-gray-600 h-12 rounded-lg transition-all"
+            />
+          </div>
+
+          {error && (
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+              {error}
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          )}
+
+          <Button
+            type="submit"
+            className="w-full h-12 bg-[#4b5563] hover:bg-[#374151] text-white font-bold text-lg rounded-lg transition-all transform active:scale-[0.98]"
+            disabled={isLoading}
+          >
+            {isLoading ? "Kaydediliyor..." : "Şifreyi Kaydet"}
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }

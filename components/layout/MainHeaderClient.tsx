@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import CartBadge from '@/components/cart/CartBadge'
 import type { User } from '@supabase/supabase-js'
@@ -13,16 +13,50 @@ interface MainHeaderClientProps {
 }
 
 export default function MainHeaderClient({ initialUser, initialIsAdmin }: MainHeaderClientProps) {
-    const [user] = useState<User | null>(initialUser)
-    const [isAdmin] = useState(initialIsAdmin)
+    const [user, setUser] = useState<User | null>(initialUser)
+    const [isAdmin, setIsAdmin] = useState(initialIsAdmin)
     const [searchQuery, setSearchQuery] = useState('')
-    const supabase = createClient()
+    const [supabase] = useState(() => createClient())
     const router = useRouter()
 
+    useEffect(() => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+            if (session?.user) {
+                setUser(session.user)
+                const { data: profile } = await supabase
+                    .from('user_profiles')
+                    .select('role')
+                    .eq('user_id', session.user.id)
+                    .single()
+                const userProfile = profile as any
+                setIsAdmin(userProfile?.role === 'admin')
+            } else {
+                setUser(null)
+                setIsAdmin(false)
+            }
+            router.refresh()
+        })
+
+        return () => {
+            subscription.unsubscribe()
+        }
+    }, [supabase, router])
+
     const handleLogout = async () => {
-        await supabase.auth.signOut()
-        router.push('/')
-        router.refresh()
+        try {
+            await fetch('/api/auth/signout', { method: 'POST' })
+            setUser(null)
+            setIsAdmin(false)
+            router.push('/')
+            router.refresh()
+        } catch (error) {
+            console.error('Logout error:', error)
+            // Force logout state even if error
+            setUser(null)
+            setIsAdmin(false)
+            router.push('/')
+            router.refresh()
+        }
     }
 
     const handleSearch = (e: React.FormEvent) => {
