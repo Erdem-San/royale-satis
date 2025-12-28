@@ -47,13 +47,13 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (
-    request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  // E-COMMERCE: Only protect /protected and /admin routes
+  // All other pages (homepage, categories, items, cart) are PUBLIC
+  const isProtectedRoute = request.nextUrl.pathname.startsWith("/protected");
+  const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
+
+  if ((isProtectedRoute || isAdminRoute) && !user) {
+    // Redirect to login only for protected routes
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import { CartProvider } from "@/contexts/CartContext";
+import ProgressBar from "@/components/ProgressBar";
+import { headers } from "next/headers";
 import "./globals.css";
+import "./nprogress.css";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -9,8 +12,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Royale Satış - Oyun Item ve Yang Satış Platformu",
+  description: "Metin2 ve Royale Online için güvenilir item ve yang satış platformu",
 };
 
 const geistSans = Geist({
@@ -19,22 +22,18 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+    <html lang="tr" suppressHydrationWarning>
+      <body className={`${geistSans.className} antialiased min-h-screen flex flex-col bg-[#1a1b1e]`}>
+        <CartProvider>
+          <ProgressBar />
           {children}
-        </ThemeProvider>
+        </CartProvider>
       </body>
     </html>
   );
