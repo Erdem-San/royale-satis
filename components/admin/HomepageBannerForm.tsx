@@ -89,7 +89,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#252830] rounded-lg p-6 space-y-4 border border-gray-800">
+    <form onSubmit={handleSubmit} className="bg-[#1F2125] rounded-lg p-6 space-y-4 border border-gray-700/50">
       <div>
         <label className="block text-gray-400 mb-2">Başlık *</label>
         <input
@@ -97,7 +97,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
           required
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
           placeholder="ROYALE SATIŞ"
         />
       </div>
@@ -107,7 +107,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
         <textarea
           value={formData.subtitle}
           onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
           rows={2}
           placeholder="Metin2 ve Royale Online için güvenilir item ve yang satış platformu"
         />
@@ -115,7 +115,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
 
       <div>
         <label className="block text-gray-400 mb-2">Banner Görseli</label>
-        
+
         {/* Dosya Yükleme */}
         <div className="mb-4">
           <input
@@ -150,7 +150,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
             type="url"
             value={formData.banner_url}
             onChange={(e) => setFormData({ ...formData, banner_url: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+            className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
             placeholder="Veya resim URL'si yapıştırın"
           />
         </div>
@@ -187,7 +187,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
           id="is_active"
           checked={formData.is_active}
           onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-          className="w-4 h-4 text-green-600 bg-gray-700 border-gray-600 rounded-lg focus:ring-green-500"
+          className="w-4 h-4 text-green-600 bg-[#252830] border-gray-600 rounded-lg focus:ring-green-500"
         />
         <label htmlFor="is_active" className="text-gray-400">
           Aktif (Anasayfada göster)
@@ -205,7 +205,7 @@ export default function HomepageBannerForm({ banner }: HomepageBannerFormProps) 
         <button
           type="button"
           onClick={() => router.push('/admin')}
-          className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+          className="px-6 py-2 bg-[#252830] text-white rounded-lg hover:bg-gray-600"
         >
           İptal
         </button>

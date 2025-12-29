@@ -47,7 +47,12 @@ export default function PaymentSuccessPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white">Yükleniyor...</div>
+        <div className="flex items-center justify-center py-12">
+          <div className="relative">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-blue-500 absolute top-0 left-0"></div>
+          </div>
+        </div>
       </div>
     )
   }

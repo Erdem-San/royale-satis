@@ -19,6 +19,8 @@ interface Order {
   }
 }
 
+const ITEMS_PER_PAGE = 20
+
 export default function AdminOrdersPage() {
   const router = useRouter()
   const supabase = createClient()
@@ -27,6 +29,7 @@ export default function AdminOrdersPage() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     fetchOrders()
@@ -36,11 +39,14 @@ export default function AdminOrdersPage() {
     filterOrders()
   }, [orders, searchQuery, statusFilter])
 
+  useEffect(() => {
+    setCurrentPage(1) // Reset to page 1 when filters change
+  }, [searchQuery, statusFilter])
+
   const fetchOrders = async () => {
     try {
       setLoading(true)
 
-      // Siparişleri çek
       const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select(`
@@ -57,16 +63,13 @@ export default function AdminOrdersPage() {
         throw ordersError
       }
 
-      // ✅ ÖNCE SİPARİŞLERİ GÖSTER (user bilgileri olmadan)
       if (ordersData && ordersData.length > 0) {
         setOrders(ordersData)
-        setLoading(false) // Loading'i hemen kapat!
+        setLoading(false)
 
-        // ✅ SONRA USER BİLGİLERİNİ ARKA PLANDA YÜKLE
         const userIds = [...new Set(ordersData.map((order: any) => order.user_id).filter(Boolean))]
 
         if (userIds.length > 0) {
-          // User bilgilerini yükle (hata olsa bile sayfa çalışmaya devam eder)
           Promise.all([
             supabase
               .from('user_profiles')
@@ -78,7 +81,6 @@ export default function AdminOrdersPage() {
               .catch(() => ({ data: [] }))
           ])
             .then(([userProfiles, emailsResult]) => {
-              // Email map oluştur
               const emailMap: Record<string, string> = {}
               if (emailsResult.data && Array.isArray(emailsResult.data)) {
                 emailsResult.data.forEach((user: any) => {
@@ -89,8 +91,6 @@ export default function AdminOrdersPage() {
               }
 
               const userMap: Record<string, any> = {}
-
-              // User profiles'dan telefon bilgilerini ekle
               userProfiles?.forEach((profile: any) => {
                 userMap[profile.user_id] = {
                   phone: profile.phone || null,
@@ -98,24 +98,15 @@ export default function AdminOrdersPage() {
                 }
               })
 
-              // Email'i olan ama profile'ı olmayan kullanıcılar için
-              Object.keys(emailMap).forEach((userId) => {
-                if (!userMap[userId]) {
-                  userMap[userId] = { email: emailMap[userId], phone: null }
-                }
-              })
-
-              // Orders'a user bilgilerini ekle ve güncelle
-              const ordersWithUsers = ordersData.map((order: any) => ({
-                ...order,
-                user: userMap[order.user_id] || null
-              }))
-
-              setOrders(ordersWithUsers)
+              setOrders(prevOrders =>
+                prevOrders.map(order => ({
+                  ...order,
+                  user: userMap[order.user_id] || { email: null, phone: null }
+                }))
+              )
             })
-            .catch((error) => {
-              // User bilgileri yüklenemedi ama siparişler zaten gösteriliyor
-              console.warn('Could not load user details:', error)
+            .catch(err => {
+              console.error('Error fetching user data:', err)
             })
         }
       } else {
@@ -124,27 +115,24 @@ export default function AdminOrdersPage() {
       }
     } catch (error) {
       console.error('Error fetching orders:', error)
-      setOrders([])
       setLoading(false)
     }
   }
 
   const filterOrders = () => {
-    let filtered = [...orders]
+    let filtered = orders
 
-    // Status filtresi
     if (statusFilter !== 'all') {
       filtered = filtered.filter(order => order.status === statusFilter)
     }
 
-    // Search filtresi
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(order => {
         const orderId = order.id.toLowerCase()
-        const userId = order.user_id?.toLowerCase() || ''
-        const email = order.user?.email?.toLowerCase() || ''
-        const phone = order.user?.phone?.toLowerCase() || ''
+        const userId = order.user_id.toLowerCase()
+        const email = (order.user?.email || '').toLowerCase()
+        const phone = (order.user?.phone || '').toLowerCase()
         const totalAmount = order.total_amount.toString()
 
         return orderId.includes(query) ||
@@ -160,14 +148,12 @@ export default function AdminOrdersPage() {
 
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
-      // State'i anında güncelle (optimistic update)
       setOrders(prevOrders =>
         prevOrders.map(order =>
           order.id === orderId ? { ...order, status } : order
         )
       )
 
-      // API route üzerinden güncelle
       const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PUT',
         headers: {
@@ -182,25 +168,21 @@ export default function AdminOrdersPage() {
         throw new Error(data.error || 'Güncelleme başarısız')
       }
 
-      // Siparişleri yeniden yükle (veritabanından güncel veriyi al)
       await fetchOrders()
-
-      // Başarı mesajı (opsiyonel - konsola log)
       console.log(`Sipariş durumu "${status}" olarak güncellendi`)
     } catch (error) {
       console.error('Error updating order status:', error)
       alert('Sipariş durumu güncellenirken bir hata oluştu: ' + (error as any)?.message)
-      // Hata durumunda yeniden yükle
       await fetchOrders()
     }
   }
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      pending: 'bg-yellow-900 text-yellow-300',
-      processing: 'bg-blue-900 text-blue-300',
-      completed: 'bg-green-900 text-green-300',
-      cancelled: 'bg-red-900 text-red-300',
+      pending: 'bg-yellow-900/20 text-yellow-300 border-yellow-800',
+      processing: 'bg-blue-900/20 text-blue-300 border-blue-800',
+      completed: 'bg-green-900/20 text-green-300 border-green-800',
+      cancelled: 'bg-red-900/20 text-red-300 border-red-800',
     }
     const labels: Record<string, string> = {
       pending: 'Beklemede',
@@ -209,185 +191,233 @@ export default function AdminOrdersPage() {
       cancelled: 'İptal Edildi',
     }
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status] || styles.pending}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status] || styles.pending}`}>
         {labels[status] || status}
       </span>
     )
   }
 
-  const statusButtons = [
-    { key: 'all', label: 'Tümü', count: orders.length },
-    { key: 'pending', label: 'Beklemede', count: orders.filter(o => o.status === 'pending').length },
-    { key: 'processing', label: 'İşleniyor', count: orders.filter(o => o.status === 'processing').length },
-    { key: 'completed', label: 'Tamamlandı', count: orders.filter(o => o.status === 'completed').length },
-    { key: 'cancelled', label: 'İptal Edildi', count: orders.filter(o => o.status === 'cancelled').length },
-  ]
+  // Pagination
+  const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const endIndex = startIndex + ITEMS_PER_PAGE
+  const paginatedOrders = filteredOrders.slice(startIndex, endIndex)
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)))
+  }
+
+  const getPageNumbers = () => {
+    const pages = []
+    const maxVisible = 5
+
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) pages.push(i)
+        pages.push('...')
+        pages.push(totalPages)
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1)
+        pages.push('...')
+        for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i)
+      } else {
+        pages.push(1)
+        pages.push('...')
+        pages.push(currentPage - 1)
+        pages.push(currentPage)
+        pages.push(currentPage + 1)
+        pages.push('...')
+        pages.push(totalPages)
+      }
+    }
+
+    return pages
+  }
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold leading-tight text-gray-200">
-          Sipariş Yönetimi
-        </h2>
-      </div>
+      <h2 className="text-xl font-semibold leading-tight text-gray-200 mb-6">
+        Sipariş Yönetimi
+      </h2>
 
-      {/* Search ve Filtreler */}
-      <div className="mb-6 space-y-4">
-        {/* Search Input */}
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Sipariş ID, Kullanıcı ID, Email, Telefon veya Tutar ile ara..."
-            className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg bg-[#1a1b1e] text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        {/* Durum Filtre Butonları */}
-        <div className="flex flex-wrap gap-2">
-          {statusButtons.map((btn) => (
-            <button
-              key={btn.key}
-              onClick={() => setStatusFilter(btn.key)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${statusFilter === btn.key
-                ? 'bg-blue-600 text-white'
-                : 'bg-[#252830] text-gray-300 hover:bg-gray-700 border border-gray-700'
-                }`}
-            >
-              {btn.label}
-              <span className="ml-2 px-2 py-0.5 rounded-full bg-gray-700 text-xs">
-                {btn.count}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Sipariş Listesi */}
-      <div className="overflow-hidden bg-[#252830] shadow-sm sm:rounded-lg border border-gray-800">
+      <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-700/50">
         <div className="p-6">
+          {/* Search and Filters */}
+          <div className="mb-6 space-y-4">
+            {/* Search Input */}
+            <div className="relative">
+              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Sipariş ID, Email, Telefon veya Tutar ile ara..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white placeholder-gray-500"
+              />
+            </div>
+
+            {/* Status Filter Buttons */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                { key: 'all', label: 'Tümü', count: orders.length },
+                { key: 'pending', label: 'Beklemede', count: orders.filter(o => o.status === 'pending').length },
+                { key: 'processing', label: 'İşleniyor', count: orders.filter(o => o.status === 'processing').length },
+                { key: 'completed', label: 'Tamamlandı', count: orders.filter(o => o.status === 'completed').length },
+                { key: 'cancelled', label: 'İptal Edildi', count: orders.filter(o => o.status === 'cancelled').length },
+              ].map(({ key, label, count }) => (
+                <button
+                  key={key}
+                  onClick={() => setStatusFilter(key)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${statusFilter === key
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
+                >
+                  {label} ({count})
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Table */}
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-400">Yükleniyor...</p>
+              <div className="bg-[#1F2125] flex items-center justify-center">
+                <div className="flex items-center justify-center py-12">
+                  <div className="relative">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-blue-500 absolute top-0 left-0"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : filteredOrders.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-400 text-lg">
-                {searchQuery || statusFilter !== 'all'
-                  ? 'Arama kriterlerinize uygun sipariş bulunamadı.'
-                  : 'Henüz sipariş bulunmamaktadır.'}
-              </p>
+              <p className="text-gray-400 text-lg mb-4">Sipariş bulunamadı.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-800">
-                <thead className="bg-gray-700">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                      Sipariş ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                      Kullanıcı
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                      Tarih
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                      Tutar
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                      Durum
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                      İşlemler
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-[#252830] divide-y divide-gray-800">
-                  {filteredOrders.map((order) => (
-                    <tr
-                      key={order.id}
-                      className="hover:bg-gray-700 cursor-pointer transition-colors"
-                      onClick={() => router.push(`/admin/orders/${order.id}`)}
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-100">
-                          #{order.id.slice(0, 8).toUpperCase()}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-100">
-                          {order.user?.email || order.user_id.slice(0, 8)}
-                        </div>
-                        {order.user?.phone && (
-                          <div className="text-xs text-gray-400">
-                            {order.user.phone}
+            <>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-700">
+                  <thead className="bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                        Sipariş Bilgileri
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                        Kullanıcı
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                        Tutar
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                        Durum
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                        İşlemler
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-[#1F2125] divide-y divide-gray-700">
+                    {paginatedOrders.map((order) => (
+                      <tr
+                        key={order.id}
+                        className="hover:bg-[#252830] cursor-pointer"
+                        onClick={() => router.push(`/admin/orders/${order.id}`)}
+                      >
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-100">
+                            #{order.id.slice(0, 8).toUpperCase()}
                           </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                        {new Date(order.created_at).toLocaleDateString('tr-TR', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-semibold text-blue-400">
-                          {order.total_amount.toFixed(2)} ₺
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {getStatusBadge(order.status)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                          {order.status !== 'processing' && (
-                            <button
-                              onClick={() => updateOrderStatus(order.id, 'processing')}
-                              className="px-3 py-1 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 text-xs transition-colors"
-                            >
-                              İşleme Al
-                            </button>
+                          <div className="text-sm text-gray-400 mt-1">
+                            {new Date(order.created_at).toLocaleDateString('tr-TR', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm text-gray-100">
+                            {order.user?.email || 'Bilinmiyor'}
+                          </div>
+                          {order.user?.phone && (
+                            <div className="text-sm text-gray-400 mt-1">
+                              {order.user.phone}
+                            </div>
                           )}
-                          {order.status !== 'completed' && (
-                            <button
-                              onClick={() => updateOrderStatus(order.id, 'completed')}
-                              className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-xs transition-colors"
-                            >
-                              Tamamla
-                            </button>
-                          )}
-                          {order.status !== 'cancelled' && (
-                            <button
-                              onClick={() => updateOrderStatus(order.id, 'cancelled')}
-                              className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 text-xs transition-colors"
-                            >
-                              İptal
-                            </button>
-                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-semibold text-blue-400">
+                            {order.total_amount.toFixed(2)} ₺
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {getStatusBadge(order.status)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" onClick={(e) => e.stopPropagation()}>
                           <Link
                             href={`/admin/orders/${order.id}`}
-                            className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-xs transition-colors"
-                            onClick={(e) => e.stopPropagation()}
+                            className="text-blue-400 hover:text-blue-300"
                           >
                             Detay
                           </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-6 flex items-center justify-between border-t border-gray-800 pt-4">
+                  <div className="text-sm text-gray-400">
+                    {startIndex + 1}-{Math.min(endIndex, filteredOrders.length)} / {filteredOrders.length} sipariş
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => goToPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Önceki
+                    </button>
+                    {getPageNumbers().map((page, idx) => (
+                      page === '...' ? (
+                        <span key={`ellipsis-${idx}`} className="px-2 text-gray-500">...</span>
+                      ) : (
+                        <button
+                          key={page}
+                          onClick={() => goToPage(page as number)}
+                          className={`px-3 py-1 rounded-lg ${currentPage === page
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    ))}
+                    <button
+                      onClick={() => goToPage(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Sonraki
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

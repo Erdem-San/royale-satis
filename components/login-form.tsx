@@ -105,7 +105,7 @@ export function LoginForm({
           <div className="space-y-4 pt-2">
             <Button
               type="submit"
-              className="w-full h-12 bg-[#4b5563] hover:bg-[#374151] text-white font-bold text-lg rounded-lg transition-all transform active:scale-[0.98]"
+              className="w-full h-12 bg-[#4b5563] hover:bg-green-600 text-white font-bold text-lg rounded-lg transition-all transform active:scale-[0.98]"
               disabled={isLoading}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}

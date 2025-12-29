@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
+const ITEMS_PER_PAGE = 20
+
 interface User {
   id: string
   user_id: string
@@ -18,6 +20,7 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState(searchParams.get('search') || '')
+  const [currentPage, setCurrentPage] = useState(1)
   const [isCreating, setIsCreating] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
@@ -49,10 +52,10 @@ export default function AdminUsersPage() {
       if (searchQuery) {
         url += `?search=${encodeURIComponent(searchQuery)}`
       }
-      
+
       const response = await fetch(url)
       const data = await response.json()
-      
+
       if (data.error) {
         setError(data.error)
       } else {
@@ -207,7 +210,7 @@ export default function AdminUsersPage() {
         Kullanıcı Yönetimi
       </h2>
 
-      <div className="overflow-hidden bg-[#252830] shadow-sm sm:rounded-lg border border-gray-800">
+      <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-700/50">
         <div className="p-6">
           {/* Flash Messages */}
           {flashMessage && (
@@ -221,7 +224,7 @@ export default function AdminUsersPage() {
               {error}
             </div>
           )}
-          
+
           {/* Search and Create Button */}
           <div className="mb-6 flex items-center justify-between gap-4">
             <form onSubmit={handleSearch} className="flex-1">
@@ -234,7 +237,7 @@ export default function AdminUsersPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="E-posta ile ara..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                 />
               </div>
             </form>
@@ -251,7 +254,7 @@ export default function AdminUsersPage() {
 
           {/* Create Form */}
           {isCreating && (
-            <div className="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-800">
+            <div className="mb-6 p-4 bg-[#252830] rounded-lg border border-gray-800">
               <h3 className="text-lg font-semibold mb-4 text-gray-100">Yeni Kullanıcı Oluştur</h3>
               <form onSubmit={handleCreate} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -263,7 +266,7 @@ export default function AdminUsersPage() {
                       type="email"
                       value={createForm.email}
                       onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                       required
                     />
                   </div>
@@ -274,7 +277,7 @@ export default function AdminUsersPage() {
                     <select
                       value={createForm.role}
                       onChange={(e) => setCreateForm({ ...createForm, role: e.target.value as 'admin' | 'user' })}
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                       required
                     >
                       <option value="user">Kullanıcı</option>
@@ -289,7 +292,7 @@ export default function AdminUsersPage() {
                       type="password"
                       value={createForm.password}
                       onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                       required
                     />
                   </div>
@@ -301,7 +304,7 @@ export default function AdminUsersPage() {
                       type="password"
                       value={createForm.password_confirmation}
                       onChange={(e) => setCreateForm({ ...createForm, password_confirmation: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                       required
                     />
                   </div>
@@ -331,11 +334,18 @@ export default function AdminUsersPage() {
           {/* Users Table */}
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-400">Yükleniyor...</p>
+              <div className="bg-[#1F2125] flex items-center justify-center">
+                <div className="flex items-center justify-center py-12">
+                  <div className="relative">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-blue-500 absolute top-0 left-0"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-800">
+              <table className="min-w-full divide-y divide-gray-700">
                 <thead className="bg-gray-700">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
@@ -352,7 +362,7 @@ export default function AdminUsersPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-[#252830] divide-y divide-gray-800">
+                <tbody className="bg-[#1F2125] divide-y divide-gray-700">
                   {users.length === 0 ? (
                     <tr>
                       <td colSpan={4} className="px-6 py-4 text-center text-gray-400">
@@ -361,7 +371,7 @@ export default function AdminUsersPage() {
                     </tr>
                   ) : (
                     users.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-700">
+                      <tr key={user.id} className="hover:bg-[#252830]">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-100">
                             {user.email}
@@ -434,7 +444,7 @@ export default function AdminUsersPage() {
                       type="email"
                       value={editForm.email}
                       onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                       required
                     />
                   </div>
@@ -446,7 +456,7 @@ export default function AdminUsersPage() {
                       type="password"
                       value={editForm.password}
                       onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                     />
                   </div>
                   {editForm.password && (
@@ -458,7 +468,7 @@ export default function AdminUsersPage() {
                         type="password"
                         value={editForm.password_confirmation}
                         onChange={(e) => setEditForm({ ...editForm, password_confirmation: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+                        className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white"
                       />
                     </div>
                   )}
@@ -473,7 +483,7 @@ export default function AdminUsersPage() {
                         const user = users.find(u => u.id === editingId)
                         return user ? isLastAdmin(user) : false
                       })()}
-                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white disabled:opacity-50"
+                      className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#1F2125] text-white disabled:opacity-50"
                       required
                     >
                       <option value="user">Kullanıcı</option>

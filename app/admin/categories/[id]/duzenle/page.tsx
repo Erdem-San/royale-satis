@@ -31,7 +31,16 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white">Kategori Düzenle</h1>
       </div>
-      <Suspense fallback={<div className="bg-gray-800 rounded-lg p-6"><p className="text-gray-400">Yükleniyor...</p></div>}>
+      <Suspense fallback={
+        <div className="bg-[#1F2125] rounded-lg border border-gray-700/50 p-6">
+          <div className="flex items-center justify-center py-12">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-blue-500 absolute top-0 left-0"></div>
+            </div>
+          </div>
+        </div>
+      }>
         <CategoryData id={id} />
       </Suspense>
     </div>

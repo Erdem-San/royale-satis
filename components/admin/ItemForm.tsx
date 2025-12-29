@@ -112,7 +112,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="bg-[#1F2125] border border-gray-700/50 rounded-lg p-6 space-y-4">
       <div>
         <label className="block text-gray-400 mb-2">Ürün Adı *</label>
         <input
@@ -120,7 +120,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
           required
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
         />
       </div>
 
@@ -131,7 +131,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
           required
           value={formData.slug}
           onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
           placeholder="urun-adi"
         />
       </div>
@@ -142,7 +142,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
           required
           value={formData.category_id}
           onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
         >
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
@@ -157,7 +157,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
           rows={3}
         />
       </div>
@@ -171,7 +171,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
             required
             value={formData.price}
             onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+            className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
           />
         </div>
 
@@ -182,14 +182,14 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
             required
             value={formData.stock}
             onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+            className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
           />
         </div>
       </div>
 
       <div>
         <label className="block text-gray-400 mb-2">Ürün Görseli</label>
-        
+
         {/* Dosya Yükleme */}
         <div className="mb-4">
           <input
@@ -224,7 +224,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
             type="url"
             value={formData.image_url}
             onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+            className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
             placeholder="Veya resim URL'si yapıştırın"
           />
         </div>
@@ -250,7 +250,7 @@ export default function ItemForm({ categories, item }: ItemFormProps) {
         <textarea
           value={formData.stats}
           onChange={(e) => setFormData({ ...formData, stats: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500 font-mono text-sm"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500 font-mono text-sm"
           rows={6}
           placeholder='{"strength": 10, "defense": 5}'
         />

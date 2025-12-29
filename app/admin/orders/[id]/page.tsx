@@ -281,7 +281,7 @@ export default function OrderDetailPage() {
         {/* Sol Kolon - Sipariş Detayları */}
         <div className="lg:col-span-2 space-y-6">
           {/* Sipariş Bilgileri */}
-          <div className="bg-[#252830] rounded-lg border border-gray-800 p-6">
+          <div className="bg-[#1F2125] rounded-lg border border-gray-700/50 p-6">
             <h3 className="text-lg font-semibold text-gray-200 mb-4">Sipariş Bilgileri</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -332,7 +332,7 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Sipariş Öğeleri */}
-          <div className="bg-[#252830] rounded-lg border border-gray-800 p-6">
+          <div className="bg-[#1F2125] rounded-lg border border-gray-700/50 p-6">
             <h3 className="text-lg font-semibold text-gray-200 mb-4">Sipariş Öğeleri</h3>
             {order.order_items && order.order_items.length > 0 ? (
               <div className="space-y-4">
@@ -373,7 +373,7 @@ export default function OrderDetailPage() {
         {/* Sağ Kolon - Kullanıcı Bilgileri ve Geçmiş */}
         <div className="space-y-6">
           {/* Kullanıcı Bilgileri */}
-          <div className="bg-[#252830] rounded-lg border border-gray-800 p-6">
+          <div className="bg-[#1F2125] rounded-lg border border-gray-700/50 p-6">
             <h3 className="text-lg font-semibold text-gray-200 mb-4">Kullanıcı Bilgileri</h3>
             <div className="space-y-3">
               <div>
@@ -400,7 +400,7 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Kullanıcının Diğer Siparişleri */}
-          <div className="bg-[#252830] rounded-lg border border-gray-800 p-6">
+          <div className="bg-[#1F2125] rounded-lg border border-gray-700/50 p-6">
             <h3 className="text-lg font-semibold text-gray-200 mb-4">
               Kullanıcının Diğer Siparişleri
             </h3>

@@ -343,8 +343,13 @@ export default function AdminTopBar() {
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                   {loadingNotifications ? (
-                    <div className="p-4 text-center text-gray-400">
-                      Yükleniyor...
+                    <div className="bg-[#1F2125] flex items-center justify-center">
+                      <div className="flex items-center justify-center py-12">
+                        <div className="relative">
+                          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700"></div>
+                          <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-blue-500 absolute top-0 left-0"></div>
+                        </div>
+                      </div>
                     </div>
                   ) : notifications.length === 0 ? (
                     <div className="p-4 text-center text-gray-400">
