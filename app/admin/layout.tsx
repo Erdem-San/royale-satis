@@ -30,10 +30,8 @@ export default function AdminLayout({
                     <Suspense fallback={<div className="h-16 bg-[#1F2125]"></div>}>
                         <AdminTopBar />
                     </Suspense>
-                    <main className="py-6">
-                        <div className="px-4 sm:px-6 lg:px-8">
-                            {children}
-                        </div>
+                    <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+                        {children}
                     </main>
                 </div>
             </div>
