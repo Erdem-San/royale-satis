@@ -50,7 +50,7 @@ export default function NavigationBarClient({ initialCategories }: NavigationBar
                     </Link>
                     <Link
                         href="/"
-                        className={`ml-auto px-4 py-3 text-sm font-bold uppercase transition-colors tracking-wide text-green-500 hover:text-green-400`}
+                        className={`ml-auto text-sm font-bold uppercase transition-colors tracking-wide text-green-500 hover:text-green-400`}
                     >
                         +BAKİYE YÜKLE
                     </Link>

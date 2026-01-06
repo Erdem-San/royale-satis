@@ -31,7 +31,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-700/50 text-center text-gray-400">
-                    <p>&copy; 2025 Diopazar. Tüm hakları saklıdır.</p>
+                    <p>&copy; 2026 Diopazar. Tüm hakları saklıdır.</p>
                 </div>
             </div>
         </footer>

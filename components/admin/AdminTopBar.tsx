@@ -293,10 +293,16 @@ export default function AdminTopBar() {
   }
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
+    try {
+      await fetch('/api/auth/signout', { method: 'POST' })
+      router.push('/')
+      router.refresh()
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Force logout even if error
+      router.push('/')
+      router.refresh()
+    }
   }
 
   return (

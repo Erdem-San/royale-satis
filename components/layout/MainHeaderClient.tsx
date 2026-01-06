@@ -81,7 +81,7 @@ export default function MainHeaderClient({ initialUser, initialIsAdmin, categori
                             {/* Mobile Menu Button - Only on mobile */}
                             <button
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                className="lg:hidden p-2 text-gray-400 hover:text-white transition-colors"
+                                className="lg:hidden py-2 text-gray-400 hover:text-white transition-colors"
                             >
                                 <Menu className="w-6 h-6" />
                             </button>
