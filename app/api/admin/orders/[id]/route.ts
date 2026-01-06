@@ -10,7 +10,7 @@ export async function PUT(
     const { id } = await params
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -26,16 +26,28 @@ export async function PUT(
     }
 
     const body = await request.json()
-    const { status } = body
+    const { status, delivery_video_url } = body
 
-    if (!status) {
-      return NextResponse.json({ error: 'Status is required' }, { status: 400 })
+    // En az bir alan gerekli
+    if (!status && delivery_video_url === undefined) {
+      return NextResponse.json({ error: 'Status or delivery_video_url is required' }, { status: 400 })
     }
 
-    // Geçerli durum kontrolü
-    const validStatuses = ['pending', 'processing', 'completed', 'cancelled']
-    if (!validStatuses.includes(status)) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+    // Güncelleme verilerini hazırla
+    const updateData: any = {}
+
+    // Status güncellemesi
+    if (status) {
+      const validStatuses = ['pending', 'processing', 'completed', 'cancelled']
+      if (!validStatuses.includes(status)) {
+        return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+      }
+      updateData.status = status
+    }
+
+    // Video URL güncellemesi
+    if (delivery_video_url !== undefined) {
+      updateData.delivery_video_url = delivery_video_url
     }
 
     // Admin client kullan (RLS bypass)
@@ -43,7 +55,7 @@ export async function PUT(
 
     const { data, error } = await adminClient
       .from('orders')
-      .update({ status })
+      .update(updateData)
       .eq('id', id)
       .select()
       .single()
@@ -61,4 +73,3 @@ export async function PUT(
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
-

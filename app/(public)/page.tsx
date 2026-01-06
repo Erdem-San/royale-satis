@@ -88,7 +88,7 @@ export default async function HomePage() {
         {/* Page Title - Below Banner */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-white">
-            {homepageBanner?.title || 'Royale Satış'}
+            {homepageBanner?.title || 'Diopazar'}
           </h1>
           {homepageBanner?.subtitle && (
             <p className="text-gray-400 text-sm mt-1">{homepageBanner.subtitle}</p>

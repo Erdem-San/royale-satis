@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import DeliveryVideoSection from '@/components/admin/DeliveryVideoSection'
 
 interface Order {
   id: string
@@ -12,6 +13,7 @@ interface Order {
   status: string
   payment_status: string
   iyzico_payment_id: string | null
+  delivery_video_url: string | null
   created_at: string
   updated_at: string
   order_items?: OrderItem[]
@@ -79,11 +81,14 @@ export default function OrderDetailPage() {
         return
       }
 
+      // Type assertion for orderData
+      const typedOrderData = orderData as any
+
       // Kullanıcı bilgilerini çek
       const { data: userProfile } = await supabase
         .from('user_profiles')
         .select('*')
-        .eq('user_id', orderData.user_id)
+        .eq('user_id', typedOrderData.user_id)
         .single()
 
       // Email bilgisini API'den çek
@@ -93,7 +98,7 @@ export default function OrderDetailPage() {
         if (response.ok) {
           const data = await response.json()
           if (data.data && Array.isArray(data.data)) {
-            const user = data.data.find((u: any) => u.user_id === orderData.user_id)
+            const user = data.data.find((u: any) => u.user_id === typedOrderData.user_id)
             if (user && user.email) {
               userEmail = user.email
             }
@@ -104,10 +109,10 @@ export default function OrderDetailPage() {
       }
 
       const orderWithUser = {
-        ...orderData,
+        ...typedOrderData,
         user: {
           email: userEmail,
-          phone: userProfile?.phone || null,
+          phone: (userProfile as any)?.phone || null,
         }
       }
 
@@ -117,7 +122,7 @@ export default function OrderDetailPage() {
       const { data: allUserOrders, error: userOrdersError } = await supabase
         .from('orders')
         .select('*')
-        .eq('user_id', orderData.user_id)
+        .eq('user_id', typedOrderData.user_id)
         .order('created_at', { ascending: false })
 
       if (!userOrdersError && allUserOrders) {
@@ -330,6 +335,15 @@ export default function OrderDetailPage() {
               )}
             </div>
           </div>
+
+          {/* Teslimat Videosu */}
+          <DeliveryVideoSection
+            orderId={order.id}
+            currentVideoUrl={order.delivery_video_url}
+            onVideoUpdated={(newUrl) => {
+              setOrder(prev => prev ? { ...prev, delivery_video_url: newUrl } : null)
+            }}
+          />
 
           {/* Sipariş Öğeleri */}
           <div className="bg-[#1F2125] rounded-lg border border-gray-700/50 p-6">

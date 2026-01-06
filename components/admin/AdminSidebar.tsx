@@ -134,8 +134,8 @@ export default function AdminSidebar() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive
-                    ? 'bg-blue-900/30 text-blue-300 shadow-sm'
-                    : 'text-gray-300 hover:bg-blue-900/20 hover:text-blue-300'
+                  ? 'bg-blue-900/30 text-blue-300 shadow-sm'
+                  : 'text-gray-300 hover:bg-blue-900/20 hover:text-blue-300'
                   }`}
               >
                 <span className="mr-3">{item.icon}</span>

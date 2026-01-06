@@ -86,7 +86,7 @@ export default function MainHeaderClient({ initialUser, initialIsAdmin, categori
                                 <Menu className="w-6 h-6" />
                             </button>
 
-                            <Link href="/" className="flex items-center gap-2">
+                            <Link href="/" className="flex items-center gap-2 mr-2">
                                 <div className="relative flex items-center">
                                     <span className="text-2xl md:text-3xl font-black tracking-tighter text-white" style={{ fontFamily: 'Arial Black, sans-serif' }}>
                                         <span className="text-green-500 italic">Dio</span>

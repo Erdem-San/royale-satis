@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import CustomerDeliveryVideo from '@/components/customer/CustomerDeliveryVideo'
 
 export default async function OrdersPage() {
   const supabase = await createClient()
@@ -110,6 +111,13 @@ export default async function OrdersPage() {
                         </div>
                       ))}
                     </div>
+                  </div>
+                )}
+
+                {/* Teslimat Videosu - Sadece video varsa göster */}
+                {order.delivery_video_url && (
+                  <div className="border-t border-gray-700 pt-4 mt-4">
+                    <CustomerDeliveryVideo videoUrl={order.delivery_video_url} />
                   </div>
                 )}
               </div>

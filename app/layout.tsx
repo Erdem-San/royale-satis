@@ -12,7 +12,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Royale Satış - Oyun Item ve Yang Satış Platformu",
+  title: "Diopazar - Oyun Item ve Yang Satış Platformu",
   description: "Metin2 ve Royale Online için güvenilir item ve yang satış platformu",
 };
 
