@@ -100,6 +100,27 @@ export default function MainHeaderClient({ initialUser, initialIsAdmin, categori
                                 Türkiye'nin En Büyük Oyuncu Pazarı
                             </span>                        </div>
 
+                        {/* Desktop Search Bar */}
+                        <form onSubmit={handleSearch} className="hidden lg:flex flex-1 max-w-md mx-4">
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Ürün ara..."
+                                    className="w-full px-4 py-2 pl-10 bg-[#1a1b1e] text-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none transition-all"
+                                />
+                                <svg
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                        </form>
+
                         {/* Desktop User Menu */}
                         <div className="hidden lg:flex items-center gap-3">
                             {user ? (
