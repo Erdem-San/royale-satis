@@ -239,10 +239,12 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold leading-tight text-gray-200 mb-6">
-        Sipariş Yönetimi
-      </h2>
+    <div className="py-4">
+      <div className="flex items-center justify-between mb-10">
+        <h2 className="text-2xl font-semibold text-white">
+          Sipariş Yönetimi
+        </h2>
+      </div>
 
       <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-700/50">
         <div className="p-6">

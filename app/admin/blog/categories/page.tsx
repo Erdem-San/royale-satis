@@ -132,36 +132,43 @@ export default function AdminBlogCategoriesPage() {
     };
 
     return (
-        <div className="py-6">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-semibold text-white">
-                        Blog Kategorileri
-                    </h2>
-                    <button
-                        onClick={() => handleOpenModal()}
-                        className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors"
-                    >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Yeni Kategori
-                    </button>
-                </div>
+        <div className="py-4">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-10">
+                <h2 className="text-2xl font-semibold text-white">
+                    Blog Kategorileri
+                </h2>
+                <button
+                    onClick={() => handleOpenModal()}
+                    className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+                >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Yeni Kategori
+                </button>
+            </div>
 
-                {/* Categories List */}
-                <div className="overflow-hidden bg-[#1F2228] shadow-sm sm:rounded-lg border border-gray-800">
+            {/* Categories List */}
+            <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-700/50">
+                <div className="p-6">
                     {loading ? (
-                        <div className="p-12 text-center">
-                            <Loader2 className="h-8 w-8 animate-spin text-indigo-500 mx-auto" />
+                        <div className="text-center py-12">
+                            <div className="bg-[#1F2125] flex items-center justify-center">
+                                <div className="flex items-center justify-center py-12">
+                                    <div className="relative">
+                                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700"></div>
+                                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-blue-500 absolute top-0 left-0"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     ) : categories.length === 0 ? (
-                        <div className="p-12 text-center">
+                        <div className="text-center py-12">
                             <div className="max-w-md mx-auto">
                                 <h3 className="text-xl font-semibold text-white mb-2">Kategori bulunamadı</h3>
                                 <p className="text-gray-400 mb-6">İlk kategorinizi oluşturarak başlayın</p>
                                 <button
                                     onClick={() => handleOpenModal()}
-                                    className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                                    className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Kategori Oluştur
@@ -171,7 +178,7 @@ export default function AdminBlogCategoriesPage() {
                     ) : (
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-700">
-                                <thead className="bg-[#252830]">
+                                <thead className="bg-gray-700">
                                     <tr>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                             İsim
@@ -187,7 +194,7 @@ export default function AdminBlogCategoriesPage() {
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-700">
+                                <tbody className="bg-[#1F2125] divide-y divide-gray-700">
                                     {categories.map((category) => (
                                         <tr key={category.id} className="hover:bg-[#252830] transition-colors">
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -205,14 +212,14 @@ export default function AdminBlogCategoriesPage() {
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button
                                                         onClick={() => handleOpenModal(category)}
-                                                        className="p-1.5 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-900/20 rounded transition-colors"
+                                                        className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                                         title="Düzenle"
                                                     >
                                                         <Edit className="h-4 w-4" />
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(category.id, category.name)}
-                                                        className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded transition-colors"
+                                                        className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                                                         title="Sil"
                                                     >
                                                         <Trash2 className="h-4 w-4" />
@@ -226,78 +233,78 @@ export default function AdminBlogCategoriesPage() {
                         </div>
                     )}
                 </div>
+            </div>
 
-                {/* Modal */}
-                {showModal && (
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-[#1F2228] rounded-lg border border-gray-800 max-w-md w-full">
-                            <div className="p-6">
-                                <h3 className="text-xl font-semibold text-white mb-4">
-                                    {editingCategory ? 'Kategori Düzenle' : 'Yeni Kategori'}
-                                </h3>
-                                <form onSubmit={handleSubmit} className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">
-                                            İsim *
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={formData.name}
-                                            onChange={(e) => handleNameChange(e.target.value)}
-                                            className="w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                            required
-                                            placeholder="Kategori ismi"
-                                        />
-                                    </div>
+            {/* Modal */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-[#252830] rounded-lg border border-gray-800 max-w-md w-full">
+                        <div className="p-6">
+                            <h3 className="text-xl font-semibold text-white mb-4">
+                                {editingCategory ? 'Kategori Düzenle' : 'Yeni Kategori'}
+                            </h3>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                                        İsim *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => handleNameChange(e.target.value)}
+                                        className="w-full px-3 py-2 rounded-md border-gray-600 bg-[#1F2125] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                        placeholder="Kategori ismi"
+                                    />
+                                </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">
-                                            Slug *
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={formData.slug}
-                                            onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                                            className="w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                            required
-                                            placeholder="kategori-slug"
-                                        />
-                                    </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                                        Slug *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={formData.slug}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                                        className="w-full px-3 py-2 rounded-md border-gray-600 bg-[#1F2125] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                        placeholder="kategori-slug"
+                                    />
+                                </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">
-                                            Açıklama
-                                        </label>
-                                        <textarea
-                                            value={formData.description}
-                                            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                                            rows={3}
-                                            className="w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                            placeholder="Kategori açıklaması"
-                                        />
-                                    </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                                        Açıklama
+                                    </label>
+                                    <textarea
+                                        value={formData.description}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                                        rows={3}
+                                        className="w-full px-3 py-2 rounded-md border-gray-600 bg-[#1F2125] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        placeholder="Kategori açıklaması"
+                                    />
+                                </div>
 
-                                    <div className="flex gap-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={handleCloseModal}
-                                            className="flex-1 rounded-md bg-[#252830] px-4 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700"
-                                        >
-                                            İptal
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="flex-1 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
-                                        >
-                                            {editingCategory ? 'Güncelle' : 'Oluştur'}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                <div className="flex gap-3 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={handleCloseModal}
+                                        className="flex-1 rounded-md bg-[#252830] px-4 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700"
+                                    >
+                                        İptal
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+                                    >
+                                        {editingCategory ? 'Güncelle' : 'Oluştur'}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 }

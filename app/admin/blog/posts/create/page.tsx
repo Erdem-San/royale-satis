@@ -110,7 +110,7 @@ export default function CreateBlogPostPage() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-semibold text-white">
-                        Yeni Blog Yazısı
+                        Yeni Yazı Oluştur
                     </h2>
                     <Link
                         href="/admin/blog/posts"
@@ -121,9 +121,10 @@ export default function CreateBlogPostPage() {
                     </Link>
                 </div>
 
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Featured Image */}
-                    <div className="overflow-hidden bg-[#1F2228] shadow-sm sm:rounded-lg border border-gray-800">
+                    <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-700/50">
                         <div className="p-6">
                             <ImageUpload
                                 value={data.featured_image}
@@ -134,7 +135,7 @@ export default function CreateBlogPostPage() {
                     </div>
 
                     {/* Basic Information */}
-                    <div className="overflow-hidden bg-[#1F2228] shadow-sm sm:rounded-lg border border-gray-800">
+                    <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-800">
                         <div className="p-6">
                             <h3 className="text-xl font-semibold text-white mb-4">Temel Bilgiler</h3>
 
@@ -148,7 +149,7 @@ export default function CreateBlogPostPage() {
                                         type="text"
                                         value={data.title}
                                         onChange={(e) => handleTitleChange(e.target.value)}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 py-2 px-3 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                         required
                                         placeholder="Blog yazısı başlığı"
                                     />
@@ -165,7 +166,7 @@ export default function CreateBlogPostPage() {
                                             type="text"
                                             value={data.slug}
                                             onChange={(e) => setData(prev => ({ ...prev, slug: e.target.value }))}
-                                            className="flex-1 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            className="flex-1 py-2 px-3 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             required
                                             placeholder="url-dostu-baslik"
                                         />
@@ -180,7 +181,7 @@ export default function CreateBlogPostPage() {
                                         id="category_id"
                                         value={data.category_id || ''}
                                         onChange={(e) => setData(prev => ({ ...prev, category_id: e.target.value ? parseInt(e.target.value) : null }))}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 py-2 px-3 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                     >
                                         <option value="">Kategori Seçiniz</option>
                                         {categories.map((category) => (
@@ -200,7 +201,7 @@ export default function CreateBlogPostPage() {
                                         value={data.excerpt}
                                         onChange={(e) => setData(prev => ({ ...prev, excerpt: e.target.value }))}
                                         rows={3}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 py-2 px-3 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                         placeholder="Blog yazısının kısa açıklaması"
                                     />
                                     <p className="mt-1 text-xs text-gray-400">
@@ -214,9 +215,7 @@ export default function CreateBlogPostPage() {
                     {/* Content Editor */}
                     <div className="overflow-hidden bg-[#1F2228] shadow-sm sm:rounded-lg border border-gray-800">
                         <div className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-semibold text-white">İçerik *</h3>
-                            </div>
+                            <h3 className="text-xl font-semibold text-white mb-4">İçerik *</h3>
                             <RichTextEditor
                                 value={data.content}
                                 onChange={handleContentChange}
@@ -226,10 +225,10 @@ export default function CreateBlogPostPage() {
                     </div>
 
                     {/* SEO Section */}
-                    <div className="overflow-hidden bg-[#1F2228] shadow-sm sm:rounded-lg border border-gray-800">
+                    <div className="overflow-hidden bg-[#1F2228] shadow-sm sm:rounded-lg border border-gray-700/50">
                         <div className="p-6">
                             <div className="flex items-center gap-2 mb-4">
-                                <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                                 <h3 className="text-xl font-semibold text-white">SEO Optimizasyonu</h3>
@@ -245,7 +244,7 @@ export default function CreateBlogPostPage() {
                                         type="text"
                                         value={data.meta_title}
                                         onChange={(e) => setData(prev => ({ ...prev, meta_title: e.target.value }))}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 py-2 px-3 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                         placeholder="SEO başlığı (boş bırakılırsa yazı başlığı kullanılır)"
                                     />
                                     <p className="mt-1 text-xs text-gray-400">
@@ -262,7 +261,7 @@ export default function CreateBlogPostPage() {
                                         value={data.meta_description}
                                         onChange={(e) => setData(prev => ({ ...prev, meta_description: e.target.value }))}
                                         rows={3}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 py-2 px-3 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                         placeholder="Arama motorları için kısa açıklama"
                                     />
                                     <p className="mt-1 text-xs text-gray-400">
@@ -297,7 +296,7 @@ export default function CreateBlogPostPage() {
                                         type="checkbox"
                                         checked={data.is_published}
                                         onChange={(e) => setData(prev => ({ ...prev, is_published: e.target.checked }))}
-                                        className="h-5 w-5 rounded border-gray-600 bg-[#252830] text-indigo-600 focus:ring-indigo-500"
+                                        className="h-5 w-5 rounded border-gray-600 bg-[#1F2125] text-blue-600 focus:ring-blue-500"
                                     />
                                     <div>
                                         <span className="text-white font-medium">Hemen yayınla</span>
@@ -343,7 +342,7 @@ export default function CreateBlogPostPage() {
                                 id="submit-form"
                                 type="submit"
                                 disabled={processing}
-                                className="rounded-md bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 inline-flex items-center gap-2"
+                                className="rounded-md bg-blue-600 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 inline-flex items-center gap-2"
                             >
                                 {processing ? (
                                     <>

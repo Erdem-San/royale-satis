@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Plus, X } from 'lucide-react'
+import Link from 'next/link'
 
 const ITEMS_PER_PAGE = 20
 
@@ -205,11 +207,12 @@ export default function AdminUsersPage() {
   const isLastAdmin = (user: User) => user.role === 'admin' && adminCount === 1
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold leading-tight text-gray-200 mb-6">
-        Kullanıcı Yönetimi
-      </h2>
-
+    <div className="py-4">
+      <div className="flex items-center justify-between mb-10">
+        <h2 className="text-2xl font-semibold text-white">
+          Kullanıcı Yönetimi
+        </h2>
+      </div>
       <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-700/50">
         <div className="p-6">
           {/* Flash Messages */}
@@ -243,11 +246,16 @@ export default function AdminUsersPage() {
             </form>
             <button
               onClick={() => setIsCreating(!isCreating)}
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg hover:from-blue-600 hover:to-sky-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+              className={`inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors ${isCreating
+                  ? 'bg-red-600 hover:bg-red-500'
+                  : 'bg-blue-600 hover:bg-blue-500'
+                }`}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
+              {isCreating ? (
+                <X className="w-4 h-4" />
+              ) : (
+                <Plus className="w-4 h-4" />
+              )}
               {isCreating ? 'İptal' : 'Kullanıcı Ekle'}
             </button>
           </div>
@@ -322,7 +330,7 @@ export default function AdminUsersPage() {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg hover:from-blue-600 hover:to-sky-700 transition-all shadow-md hover:shadow-lg"
+                    className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
                   >
                     Kullanıcı Oluştur
                   </button>

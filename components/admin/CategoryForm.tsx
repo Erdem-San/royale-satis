@@ -29,7 +29,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
     } else {
       setUploadingBanner(true)
     }
-    
+
     try {
       const formDataUpload = new FormData()
       formDataUpload.append('file', file)
@@ -114,7 +114,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="bg-[#1F2125] rounded-lg p-6 space-y-4 border border-gray-700/50">
       <div>
         <label className="block text-gray-400 mb-2">Kategori Adı *</label>
         <input
@@ -122,7 +122,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
           required
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
         />
       </div>
 
@@ -133,7 +133,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
           required
           value={formData.slug}
           onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
           placeholder="metin2"
         />
       </div>
@@ -143,7 +143,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+          className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
           rows={3}
         />
       </div>
@@ -153,7 +153,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
         <p className="text-gray-500 text-sm mb-2">
           Anasayfadaki kategori kartında gösterilecek görsel
         </p>
-        
+
         {/* Dosya Yükleme */}
         <div className="mb-4">
           <input
@@ -188,7 +188,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
             type="url"
             value={formData.image_url}
             onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+            className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
             placeholder="Veya resim URL'si yapıştırın"
           />
         </div>
@@ -216,7 +216,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
         <p className="text-gray-500 text-sm mb-2">
           Kategori sayfasındaki hero banner için kullanılacak görsel (kart görselinden farklı olabilir)
         </p>
-        
+
         {/* Banner Dosya Yükleme */}
         <div className="mb-4">
           <input
@@ -251,7 +251,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
             type="url"
             value={formData.banner_url}
             onChange={(e) => setFormData({ ...formData, banner_url: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
+            className="w-full px-4 py-2 bg-[#252830] text-white rounded-lg border border-gray-600 focus:outline-none focus:border-green-500"
             placeholder="Veya banner görsel URL'si yapıştırın"
           />
         </div>
@@ -284,7 +284,7 @@ export default function CategoryForm({ category }: CategoryFormProps) {
         </button>
         <Link
           href="/admin/categories"
-          className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+          className="px-6 py-2 bg-[#252830] text-white rounded-lg hover:bg-gray-600"
         >
           İptal
         </Link>

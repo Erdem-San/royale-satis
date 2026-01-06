@@ -33,7 +33,7 @@ export default function BlogCard({
     return (
         <Link
             href={`/blog/${slug}`}
-            className="group block bg-[#1F2228] rounded-xl overflow-hidden border border-gray-800 hover:border-indigo-600 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-600/10"
+            className="group block bg-[#1F2228] rounded-xl overflow-hidden border border-gray-800 hover:border-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-600/10"
         >
             {/* Featured Image */}
             <div className="relative h-48 bg-gray-800 overflow-hidden">
@@ -51,7 +51,9 @@ export default function BlogCard({
                         </svg>
                     </div>
                 )}
+                <div className="absolute inset-0 bg-black/20"></div>
             </div>
+
 
             {/* Content */}
             <div className="p-6">
@@ -64,7 +66,7 @@ export default function BlogCard({
                 )}
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-indigo-400 transition-colors line-clamp-2">
+                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors line-clamp-2">
                     {title}
                 </h3>
 
@@ -76,7 +78,7 @@ export default function BlogCard({
                 )}
 
                 {/* Read More */}
-                <div className="flex items-center gap-2 text-indigo-400 font-medium text-sm group-hover:gap-3 transition-all">
+                <div className="flex items-center gap-2 text-green-400 font-medium text-sm group-hover:gap-3 transition-all">
                     <span>Devamını Oku</span>
                     <ArrowRight className="h-4 w-4" />
                 </div>

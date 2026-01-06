@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Plus } from 'lucide-react'
 
 const ITEMS_PER_PAGE = 20
 
@@ -98,19 +99,15 @@ export default function AdminItemsPage() {
   }
 
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold leading-tight text-gray-200">
-          Ürün Yönetimi
-        </h2>
+    <div className="py-4">
+      <div className="flex items-center justify-between mb-10">
+        <h2 className="text-2xl font-semibold text-white">Ürün Yönetimi</h2>
         <Link
           href="/admin/items/yeni"
-          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg hover:from-blue-600 hover:to-sky-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+          className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Yeni Ürün Ekle
+          <Plus className="mr-2 h-4 w-4" />
+          Yeni Yazı
         </Link>
       </div>
 

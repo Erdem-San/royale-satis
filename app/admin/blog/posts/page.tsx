@@ -79,86 +79,93 @@ export default function AdminBlogPostsPage() {
     };
 
     return (
-        <div className="py-6">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-semibold text-white">
-                        Blog Yazıları
-                    </h2>
-                    <Link
-                        href="/admin/blog/posts/create"
-                        className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors"
-                    >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Yeni Yazı
-                    </Link>
-                </div>
+        <div className="py-4">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-10">
+                <h2 className="text-2xl font-semibold text-white">
+                    Blog Yazıları
+                </h2>
+                <Link
+                    href="/admin/blog/posts/create"
+                    className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+                >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Yeni Yazı
+                </Link>
+            </div>
 
-                {/* Filters and Search */}
-                <div className="mb-6 space-y-4">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        {/* Status Filters */}
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => handleFilterChange('all')}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filters.status === 'all'
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'bg-[#1F2228] text-gray-300 hover:bg-[#252830] border border-gray-700'
-                                    }`}
-                            >
-                                Tümü ({posts?.total || 0})
-                            </button>
-                            <button
-                                onClick={() => handleFilterChange('published')}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filters.status === 'published'
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'bg-[#1F2228] text-gray-300 hover:bg-[#252830] border border-gray-700'
-                                    }`}
-                            >
-                                Yayında
-                            </button>
-                            <button
-                                onClick={() => handleFilterChange('draft')}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filters.status === 'draft'
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'bg-[#1F2228] text-gray-300 hover:bg-[#252830] border border-gray-700'
-                                    }`}
-                            >
-                                Taslak
-                            </button>
-                        </div>
-
-                        {/* Search */}
-                        <form onSubmit={handleSearch} className="flex-1 flex gap-2">
-                            <div className="relative flex-1">
-                                <input
-                                    type="text"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder="Blog yazılarında ara..."
-                                    className="w-full rounded-md border-gray-600 bg-[#1F2228] text-white shadow-sm pl-10 focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                            </div>
-                            <button
-                                type="submit"
-                                className="rounded-md bg-[#252830] px-4 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700 transition-colors"
-                            >
-                                Ara
-                            </button>
-                        </form>
+            {/* Filters and Search */}
+            <div className="mb-6 space-y-4">
+                <div className="flex flex-col md:flex-row gap-4">
+                    {/* Status Filters */}
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => handleFilterChange('all')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filters.status === 'all'
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-[#1F2125] text-gray-300 hover:bg-[#252830] border border-gray-700'
+                                }`}
+                        >
+                            Tümü ({posts?.total || 0})
+                        </button>
+                        <button
+                            onClick={() => handleFilterChange('published')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filters.status === 'published'
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-[#1F2125] text-gray-300 hover:bg-[#252830] border border-gray-700'
+                                }`}
+                        >
+                            Yayında
+                        </button>
+                        <button
+                            onClick={() => handleFilterChange('draft')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filters.status === 'draft'
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-[#1F2125] text-gray-300 hover:bg-[#252830] border border-gray-700'
+                                }`}
+                        >
+                            Taslak
+                        </button>
                     </div>
-                </div>
 
-                {/* Blog List */}
-                <div className="overflow-hidden bg-[#1F2228] shadow-sm sm:rounded-lg border border-gray-800">
+                    {/* Search */}
+                    <form onSubmit={handleSearch} className="flex-1 flex gap-2">
+                        <div className="relative flex-1">
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Blog yazılarında ara..."
+                                className="w-full py-2 px-3 rounded-md border border-gray-700 bg-[#1F2125] text-white shadow-sm pl-10 focus:border-blue-500 focus:ring-blue-500"
+                            />
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        </div>
+                        <button
+                            type="submit"
+                            className="rounded-md bg-[#252830] px-4 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700 transition-colors"
+                        >
+                            Ara
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {/* Blog List */}
+            <div className="overflow-hidden bg-[#1F2125] shadow-sm sm:rounded-lg border border-gray-700/50">
+                <div className="p-6">
                     {loading ? (
-                        <div className="p-12 text-center">
-                            <Loader2 className="h-8 w-8 animate-spin text-indigo-500 mx-auto" />
+                        <div className="text-center py-12">
+                            <div className="bg-[#1F2125] flex items-center justify-center">
+                                <div className="flex items-center justify-center py-12">
+                                    <div className="relative">
+                                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700"></div>
+                                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-blue-500 absolute top-0 left-0"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     ) : !posts || posts.data.length === 0 ? (
-                        <div className="p-12 text-center">
+                        <div className="text-center py-12">
                             <div className="max-w-md mx-auto">
                                 <div className="w-16 h-16 bg-[#252830] rounded-full flex items-center justify-center mx-auto mb-4">
                                     <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +176,7 @@ export default function AdminBlogPostsPage() {
                                 <p className="text-gray-400 mb-6">İlk blog yazınızı oluşturarak başlayın</p>
                                 <Link
                                     href="/admin/blog/posts/create"
-                                    className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                                    className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Blog Yazısı Oluştur
@@ -177,11 +184,11 @@ export default function AdminBlogPostsPage() {
                             </div>
                         </div>
                     ) : (
-                        <div className="p-6 space-y-6">
+                        <div className="space-y-6">
                             {posts.data.map((post) => (
                                 <div
                                     key={post.id}
-                                    className="bg-[#252830] border border-gray-700 rounded-lg overflow-hidden hover:border-gray-600 transition-colors"
+                                    className="bg-[#252830] border border-gray-800 rounded-lg overflow-hidden hover:border-gray-600 transition-colors"
                                 >
                                     <div className="flex flex-col md:flex-row gap-6 p-6">
                                         {/* Featured Image */}
@@ -216,8 +223,8 @@ export default function AdminBlogPostsPage() {
                                                 </div>
                                                 <span
                                                     className={`px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ${post.is_published
-                                                            ? 'bg-green-900/30 text-green-400'
-                                                            : 'bg-gray-700 text-gray-300'
+                                                        ? 'bg-green-900/30 text-green-400'
+                                                        : 'bg-gray-700 text-gray-300'
                                                         }`}
                                                 >
                                                     {post.is_published ? 'Yayında' : 'Taslak'}
@@ -242,21 +249,21 @@ export default function AdminBlogPostsPage() {
                                                     <Link
                                                         href={`/blog/${post.slug}`}
                                                         target="_blank"
-                                                        className="p-1.5 text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 rounded transition-colors"
+                                                        className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                                         title="Görüntüle"
                                                     >
                                                         <Eye className="h-4 w-4" />
                                                     </Link>
                                                     <Link
                                                         href={`/admin/blog/posts/${post.id}/edit`}
-                                                        className="p-1.5 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-900/20 rounded transition-colors"
+                                                        className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                                         title="Düzenle"
                                                     >
                                                         <Edit className="h-4 w-4" />
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDelete(post.id, post.title)}
-                                                        className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded transition-colors"
+                                                        className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                                                         title="Sil"
                                                     >
                                                         <Trash2 className="h-4 w-4" />

@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import HomepageBannerForm from '@/components/admin/HomepageBannerForm'
+import { ArrowLeft, Sparkles, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function AdminHomepageBannerPage() {
   const supabase = await createClient()
@@ -12,21 +14,30 @@ export default async function AdminHomepageBannerPage() {
   const activeBanner = banners?.find(b => b.is_active)
 
   return (
-    <div className="max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Anasayfa Banner Yönetimi</h1>
-        <p className="text-gray-400 mt-2">
-          Anasayfanın hero banner'ını yönetin
-        </p>
-      </div>
-
-      {error && (
-        <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-4">
-          Bir hata oluştu: {error.message}
+    <div className="py-6">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-white">
+            Anasayfa Banner Yönetimi
+          </h2>
+          <Link
+            href="/admin/blog/posts"
+            className="inline-flex items-center rounded-md bg-[#252830] px-4 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Geri
+          </Link>
         </div>
-      )}
 
-      <HomepageBannerForm banner={activeBanner} />
+        {error && (
+          <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-4">
+            Bir hata oluştu: {error.message}
+          </div>
+        )}
+
+        <HomepageBannerForm banner={activeBanner} />
+      </div>
     </div>
   )
 }

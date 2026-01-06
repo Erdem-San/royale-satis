@@ -8,8 +8,8 @@ export default function TopBar() {
             {/* Top Strip - Üst ince şerit */}
             <div className="bg-[#252830] border-b border-[#1a1b1e] py-1.5">
                 <div className="container mx-auto px-4">
-                    <div className="flex justify-end text-[11px] font-medium text-gray-400 gap-4 tracking-wide">
-                        <Link href="/" className="hover:text-white transition-colors">Blog</Link>
+                    <div className="flex justify-end text-xs font-medium text-gray-400 gap-4 tracking-wide">
+                        <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
                         <span className="text-gray-700">|</span>
                         <Link href="/" className="hover:text-white transition-colors">Yardım & Destek</Link>
                     </div>

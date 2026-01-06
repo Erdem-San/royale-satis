@@ -33,7 +33,7 @@ export default function TagInput({ value, onChange, placeholder = 'Etiket ekle v
 
     return (
         <div className="space-y-2">
-            <div className="flex flex-wrap gap-2 p-3 rounded-md border border-gray-600 bg-[#1F2228] min-h-[42px]">
+            <div className="flex flex-wrap gap-2 p-3 rounded-md border border-gray-600 bg-[#252830] min-h-[42px]">
                 {value.map((tag, index) => (
                     <span
                         key={index}

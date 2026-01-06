@@ -3,143 +3,174 @@
 import { useEffect, useRef, memo } from 'react';
 
 interface RichTextEditorProps {
-    value: string;
-    onChange: (value: string) => void;
-    placeholder?: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
 }
 
 function RichTextEditor({
-    value,
-    onChange,
-    placeholder = 'İçeriğinizi yazın...'
+  value,
+  onChange,
+  placeholder = 'İçeriğinizi yazın...'
 }: RichTextEditorProps) {
-    const editorRef = useRef<HTMLDivElement>(null);
-    const quillRef = useRef<any>(null);
-    const isUpdatingRef = useRef(false);
+  const editorRef = useRef<HTMLDivElement>(null);
+  const quillRef = useRef<any>(null);
+  const isUpdatingRef = useRef(false);
 
-    useEffect(() => {
-        if (!editorRef.current) return;
+  useEffect(() => {
+    if (!editorRef.current) return;
 
-        // Dynamically import Quill
-        import('quill').then((Quill) => {
-            if (!editorRef.current || quillRef.current) return;
+    let quill: any = null;
 
-            // Initialize Quill
-            const quill = new Quill.default(editorRef.current, {
-                theme: 'snow',
-                placeholder,
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        [{ 'indent': '-1' }, { 'indent': '+1' }],
-                        [{ 'align': [] }],
-                        ['blockquote', 'code-block'],
-                        ['link', 'image'],
-                        ['clean']
-                    ],
-                },
-            });
+    // Dynamically import Quill
+    const initQuill = async () => {
+      const Quill = await import('quill');
 
-            quillRef.current = quill;
+      if (!editorRef.current) return;
 
-            // Set initial value
-            if (value) {
-                quill.root.innerHTML = value;
-            }
+      // Force cleanup any existing Quill instances
+      const existingToolbar = editorRef.current.querySelector('.ql-toolbar');
+      const existingContainer = editorRef.current.querySelector('.ql-container');
 
-            // Listen for changes
-            quill.on('text-change', () => {
-                if (!isUpdatingRef.current) {
-                    onChange(quill.root.innerHTML);
-                }
-            });
+      if (existingToolbar) existingToolbar.remove();
+      if (existingContainer) existingContainer.remove();
 
-            // Custom image handler
-            const toolbar = quill.getModule('toolbar');
-            toolbar.addHandler('image', () => {
-                const input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-                input.click();
+      // Clear the div completely
+      editorRef.current.innerHTML = '';
 
-                input.onchange = async () => {
-                    const file = input.files?.[0];
-                    if (!file) return;
+      // Create a new div for Quill
+      const editorDiv = document.createElement('div');
+      editorRef.current.appendChild(editorDiv);
 
-                    const formData = new FormData();
-                    formData.append('image', file);
+      // Initialize Quill on the new div
+      quill = new Quill.default(editorDiv, {
+        theme: 'snow',
+        placeholder,
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'align': [] }],
+            ['blockquote', 'code-block'],
+            ['link', 'image'],
+            ['clean']
+          ],
+        },
+      });
 
-                    try {
-                        const response = await fetch('/api/admin/blog/upload-image', {
-                            method: 'POST',
-                            body: formData,
-                        });
+      quillRef.current = quill;
 
-                        if (!response.ok) {
-                            const errorData = await response.json().catch(() => ({ error: 'Upload failed' }));
-                            throw new Error(errorData.error || 'Upload failed');
-                        }
+      // Set initial value
+      if (value) {
+        quill.root.innerHTML = value;
+      }
 
-                        const data = await response.json();
-
-                        if (data.url) {
-                            const range = quill.getSelection(true);
-                            if (range) {
-                                quill.insertEmbed(range.index, 'image', data.url);
-                                quill.setSelection(range.index + 1);
-                            } else {
-                                const length = quill.getLength();
-                                quill.insertEmbed(length - 1, 'image', data.url);
-                                quill.setSelection(length);
-                            }
-                        } else {
-                            console.error('URL missing');
-                            alert('Resim eklenirken bir hata oluştu');
-                        }
-                    } catch (error: any) {
-                        console.error('Upload error:', error);
-                        alert(error.message || 'Resim yüklenirken bir hata oluştu');
-                    }
-                };
-            });
-        });
-
-        // Import Quill CSS
-        import('quill/dist/quill.snow.css');
-
-        return () => {
-            if (quillRef.current) {
-                quillRef.current = null;
-            }
-        };
-    }, []);
-
-    // Update editor when value changes externally
-    useEffect(() => {
-        if (quillRef.current && value !== quillRef.current.root.innerHTML) {
-            isUpdatingRef.current = true;
-            quillRef.current.root.innerHTML = value;
-            isUpdatingRef.current = false;
+      // Listen for changes
+      quill.on('text-change', () => {
+        if (!isUpdatingRef.current) {
+          onChange(quill.root.innerHTML);
         }
-    }, [value]);
+      });
 
-    return (
-        <div className="rich-text-editor">
-            <div ref={editorRef} />
-            <style jsx global>{`
+      // Custom image handler
+      const toolbar = quill.getModule('toolbar');
+      toolbar.addHandler('image', () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+          const file = input.files?.[0];
+          if (!file) return;
+
+          const formData = new FormData();
+          formData.append('image', file);
+
+          try {
+            const response = await fetch('/api/admin/blog/upload-image', {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({ error: 'Upload failed' }));
+              throw new Error(errorData.error || 'Upload failed');
+            }
+
+            const data = await response.json();
+
+            if (data.url) {
+              const range = quill.getSelection(true);
+              if (range) {
+                quill.insertEmbed(range.index, 'image', data.url);
+                quill.setSelection(range.index + 1);
+              } else {
+                const length = quill.getLength();
+                quill.insertEmbed(length - 1, 'image', data.url);
+                quill.setSelection(length);
+              }
+            } else {
+              console.error('URL missing');
+              alert('Resim eklenirken bir hata oluştu');
+            }
+          } catch (error: any) {
+            console.error('Upload error:', error);
+            alert(error.message || 'Resim yüklenirken bir hata oluştu');
+          }
+        };
+      });
+    };
+
+    // Import Quill CSS and initialize
+    Promise.all([
+      import('quill/dist/quill.snow.css'),
+      initQuill()
+    ]);
+
+    return () => {
+      // Properly cleanup Quill instance
+      if (quill) {
+        quill.off('text-change');
+      }
+
+      if (quillRef.current) {
+        quillRef.current = null;
+      }
+
+      // Clear the editor div content completely
+      if (editorRef.current) {
+        editorRef.current.innerHTML = '';
+      }
+    };
+  }, []);
+
+  // Update editor when value changes externally
+  useEffect(() => {
+    if (quillRef.current && value !== quillRef.current.root.innerHTML) {
+      isUpdatingRef.current = true;
+      quillRef.current.root.innerHTML = value;
+      isUpdatingRef.current = false;
+    }
+  }, [value]);
+
+  return (
+    <div className="rich-text-editor">
+      <div ref={editorRef} />
+      <style jsx global>{`
         .rich-text-editor .ql-toolbar {
-          background: #1e293b;
-          border: 1px solid #334155;
-          border-radius: 0.5rem 0.5rem 0 0;
+          background: #1a1b1e !important;
+          border: 1px solid #2b313c !important;
+          border-radius: 0.5rem 0.5rem 0 0 !important;
         }
         
         .rich-text-editor .ql-container {
-          background: #0f172a;
-          border: 1px solid #334155;
-          border-radius: 0 0 0.5rem 0.5rem;
+          background: #1a1b1e !important;
+          border: 1px solid #2b313c !important;
+          border-radius: 0 0 0.5rem 0.5rem !important;
           min-height: 400px;
           font-size: 16px;
         }
@@ -168,7 +199,7 @@ function RichTextEditor({
         
         .rich-text-editor .ql-picker-options {
           background: #1e293b;
-          border: 1px solid #334155;
+          border: 1px solid #2b313c;
         }
         
         .rich-text-editor .ql-picker-item {
@@ -197,8 +228,8 @@ function RichTextEditor({
           fill: #3b82f6;
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }
 
 export default memo(RichTextEditor);

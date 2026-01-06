@@ -31,9 +31,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     const items = itemsData as any[]
 
-    const bannerGradient = slug === 'metin2'
-        ? 'from-yellow-900 via-yellow-800 to-gray-900'
-        : 'from-green-900 via-green-800 to-gray-900'
+    const bannerGradient
+        = slug === 'metin2'
+            ? 'from-yellow-900 via-yellow-800 to-gray-900'
+            : slug === 'knight-online'
+                ? 'from-red-900 via-red-800 to-gray-900'
+                : slug === 'rise-online'
+                    ? 'from-purple-900 via-purple-800 to-gray-900'
+                    : slug === 'royal-online'
+                        ? 'from-green-900 via-green-800 to-gray-900'
+                        : 'from-green-900 via-green-800 to-gray-900'
 
     const bannerImage = category.banner_url || category.image_url
 

@@ -52,7 +52,7 @@ export default function BlogPostPage() {
     if (loading) {
         return (
             <div className="min-h-screen bg-[#1a1b1e] flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-green-500" />
             </div>
         );
     }
@@ -62,7 +62,7 @@ export default function BlogPostPage() {
             <div className="min-h-screen bg-[#1a1b1e] flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-white mb-4">{error || 'Blog yazısı bulunamadı'}</h1>
-                    <Link href="/blog" className="text-indigo-400 hover:text-indigo-300">
+                    <Link href="/blog" className="text-green-400 hover:text-green-300">
                         Blog sayfasına dön
                     </Link>
                 </div>
@@ -73,7 +73,7 @@ export default function BlogPostPage() {
     return (
         <div className="min-h-screen bg-[#1a1b1e]">
             {/* Header */}
-            <div className="bg-[#1F2228] border-b border-gray-800">
+            <div className="bg-[##1a1b1e]">
                 <div className="container mx-auto px-4 py-6">
                     <Link
                         href="/blog"
@@ -113,7 +113,7 @@ export default function BlogPostPage() {
                             {post.category && (
                                 <div className="flex items-center gap-2">
                                     <Tag className="h-4 w-4" />
-                                    <span className="px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-full text-xs font-medium">
+                                    <span className="px-3 py-1 bg-green-600/20 text-green-400 rounded-full text-xs font-medium">
                                         {post.category.name}
                                     </span>
                                 </div>
@@ -137,12 +137,12 @@ export default function BlogPostPage() {
                             className="prose prose-invert prose-lg max-w-none
                 prose-headings:text-white 
                 prose-p:text-gray-300 
-                prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:text-indigo-300
+                prose-a:text-green-400 prose-a:no-underline hover:prose-a:text-green-300
                 prose-strong:text-white
-                prose-code:text-indigo-400 prose-code:bg-indigo-900/20 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                prose-code:text-green-400 prose-code:bg-green-900/20 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
                 prose-pre:bg-[#1F2228] prose-pre:border prose-pre:border-gray-700
                 prose-img:rounded-lg
-                prose-blockquote:border-l-indigo-500 prose-blockquote:text-gray-300
+                prose-blockquote:border-l-green-500 prose-blockquote:text-gray-300
                 prose-ul:text-gray-300
                 prose-ol:text-gray-300
                 prose-li:text-gray-300"

@@ -138,7 +138,7 @@ export default function EditBlogPostPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
             </div>
         );
     }
@@ -187,7 +187,7 @@ export default function EditBlogPostPage() {
                                         type="text"
                                         value={data.title}
                                         onChange={(e) => handleTitleChange(e.target.value)}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 block w-full py-2 px-3 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                         required
                                         placeholder="Blog yazısı başlığı"
                                     />
@@ -204,7 +204,7 @@ export default function EditBlogPostPage() {
                                             type="text"
                                             value={data.slug}
                                             onChange={(e) => setData(prev => ({ ...prev, slug: e.target.value }))}
-                                            className="flex-1 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            className="flex-1 rounded-md py-2 px-3 border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                             required
                                             placeholder="url-dostu-baslik"
                                         />
@@ -219,7 +219,7 @@ export default function EditBlogPostPage() {
                                         id="category_id"
                                         value={data.category_id || ''}
                                         onChange={(e) => setData(prev => ({ ...prev, category_id: e.target.value ? parseInt(e.target.value) : null }))}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 block w-full py-2 px-3 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     >
                                         <option value="">Kategori Seçiniz</option>
                                         {categories.map((category) => (
@@ -239,7 +239,7 @@ export default function EditBlogPostPage() {
                                         value={data.excerpt}
                                         onChange={(e) => setData(prev => ({ ...prev, excerpt: e.target.value }))}
                                         rows={3}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 block w-full py-2 px-3 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                         placeholder="Blog yazısının kısa açıklaması"
                                     />
                                 </div>
@@ -279,7 +279,7 @@ export default function EditBlogPostPage() {
                                         type="text"
                                         value={data.meta_title}
                                         onChange={(e) => setData(prev => ({ ...prev, meta_title: e.target.value }))}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 block w-full py-2 px-3 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                         placeholder="SEO başlığı"
                                     />
                                 </div>
@@ -293,7 +293,7 @@ export default function EditBlogPostPage() {
                                         value={data.meta_description}
                                         onChange={(e) => setData(prev => ({ ...prev, meta_description: e.target.value }))}
                                         rows={3}
-                                        className="mt-1 block w-full rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        className="mt-1 block w-full py-2 px-3 rounded-md border-gray-600 bg-[#252830] text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                         placeholder="Arama motorları için kısa açıklama"
                                     />
                                 </div>
@@ -321,7 +321,7 @@ export default function EditBlogPostPage() {
                                         type="checkbox"
                                         checked={data.is_published}
                                         onChange={(e) => setData(prev => ({ ...prev, is_published: e.target.checked }))}
-                                        className="h-5 w-5 rounded border-gray-600 bg-[#252830] text-indigo-600 focus:ring-indigo-500"
+                                        className="h-5 w-5 rounded py-2 px-3 border-gray-600 bg-[#252830] text-indigo-600 focus:ring-indigo-500"
                                     />
                                     <div>
                                         <span className="text-white font-medium">Yayında</span>
@@ -350,7 +350,7 @@ export default function EditBlogPostPage() {
                     <div className="flex items-center justify-between gap-4 pt-4">
                         <Link
                             href="/admin/blog/posts"
-                            className="rounded-md bg-[#252830] px-6 py-3 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700"
+                            className="rounded-md bg-[#252830] py-2 px-3 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700"
                         >
                             İptal
                         </Link>
