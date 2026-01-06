@@ -11,9 +11,21 @@ export default async function Header() {
     const { data: categoriesData } = await supabase
         .from('categories')
         .select('*')
-        .order('name')
 
-    const categories = categoriesData || []
+    // Kategorileri özel sırayla düzenle
+    const categoryOrder = ['royale-online', 'metin2', 'knight-online', 'rise-online']
+    const sortedCategories = (categoriesData as any[])?.sort((a, b) => {
+        const indexA = categoryOrder.indexOf(a.slug)
+        const indexB = categoryOrder.indexOf(b.slug)
+
+        // Eğer kategori listede yoksa sona at
+        if (indexA === -1) return 1
+        if (indexB === -1) return -1
+
+        return indexA - indexB
+    }) || []
+
+    const categories = sortedCategories
 
     // Fetch user data
     const { data: { user } } = await supabase.auth.getUser()
