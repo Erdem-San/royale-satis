@@ -64,62 +64,64 @@ export default function CartPage() {
                         {items.map((cartItem) => (
                             <div
                                 key={cartItem.item.id}
-                                className="bg-[#252830] rounded-lg p-6 flex items-center gap-6 border border-gray-800"
+                                className="bg-[#252830] rounded-lg p-4 md:p-6 border border-gray-800"
                             >
-                                <div className="w-24 h-24 bg-gradient-to-br from-[#252830] to-[#1a1b1e] rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                                    {cartItem.item.image_url ? (
-                                        <img
-                                            src={cartItem.item.image_url}
-                                            alt={cartItem.item.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="text-gray-500 text-2xl">📦</div>
-                                    )}
-                                </div>
-
-                                <div className="flex-grow">
-                                    <Link
-                                        href={`/item/${cartItem.item.slug}`}
-                                        className="text-xl font-semibold text-white hover:text-green-400 mb-2 block transition-colors"
-                                    >
-                                        {cartItem.item.name}
-                                    </Link>
-                                    <p className="text-gray-400 text-sm mb-2">
-                                        Birim Fiyat: {cartItem.item.price.toFixed(2)} ₺
-                                    </p>
-                                </div>
-
-                                <div className="flex items-center gap-4">
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity - 1)}
-                                            className="w-8 h-8 bg-gray-700 cursor-pointer text-white rounded-lg hover:bg-gray-600 transition-colors"
-                                        >
-                                            -
-                                        </button>
-                                        <span className="w-12 text-center text-white">{cartItem.quantity}</span>
-                                        <button
-                                            onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity + 1)}
-                                            className="w-8 h-8 bg-gray-700 cursor-pointer text-white rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                            disabled={cartItem.quantity >= cartItem.item.stock}
-                                        >
-                                            +
-                                        </button>
+                                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
+                                    <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-[#252830] to-[#1a1b1e] rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                        {cartItem.item.image_url ? (
+                                            <img
+                                                src={cartItem.item.image_url}
+                                                alt={cartItem.item.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="text-gray-500 text-2xl">📦</div>
+                                        )}
                                     </div>
 
-                                    <div className="text-right min-w-[100px]">
-                                        <p className="text-lg font-bold text-green-400">
-                                            {(cartItem.item.price * cartItem.quantity).toFixed(2)} ₺
+                                    <div className="flex-grow w-full md:w-auto">
+                                        <Link
+                                            href={`/item/${cartItem.item.slug}`}
+                                            className="text-lg md:text-xl font-semibold text-white hover:text-green-400 mb-2 block transition-colors"
+                                        >
+                                            {cartItem.item.name}
+                                        </Link>
+                                        <p className="text-gray-400 text-sm mb-2">
+                                            Birim Fiyat: {cartItem.item.price.toFixed(2)} ₺
                                         </p>
                                     </div>
 
-                                    <button
-                                        onClick={() => removeFromCart(cartItem.item.id)}
-                                        className="text-red-400 cursor-pointer hover:text-red-300 px-2 transition-colors"
-                                    >
-                                        ✕
-                                    </button>
+                                    <div className="flex flex-row items-center gap-3 md:gap-4 w-full md:w-auto justify-between md:justify-end">
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity - 1)}
+                                                className="w-8 h-8 bg-gray-700 cursor-pointer text-white rounded-lg hover:bg-gray-600 transition-colors"
+                                            >
+                                                -
+                                            </button>
+                                            <span className="w-12 text-center text-white">{cartItem.quantity}</span>
+                                            <button
+                                                onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity + 1)}
+                                                className="w-8 h-8 bg-gray-700 cursor-pointer text-white rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                disabled={cartItem.quantity >= cartItem.item.stock}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+
+                                        <div className="text-right min-w-[80px]">
+                                            <p className="text-lg font-bold text-green-400">
+                                                {(cartItem.item.price * cartItem.quantity).toFixed(2)} ₺
+                                            </p>
+                                        </div>
+
+                                        <button
+                                            onClick={() => removeFromCart(cartItem.item.id)}
+                                            className="text-red-400 cursor-pointer hover:text-red-300 px-2 transition-colors"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}

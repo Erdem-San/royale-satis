@@ -18,7 +18,7 @@ export default function NavigationBarClient({ initialCategories }: NavigationBar
     }
 
     return (
-        <div className="bg-[#252830] border-b border-[#1a1b1e] shadow-lg relative z-30">
+        <div className="hidden lg:block bg-[#252830] border-b border-[#1a1b1e] shadow-lg relative z-30">
             <div className="container mx-auto px-4">
                 <nav className="flex items-center gap-1 overflow-x-auto no-scrollbar">
                     <Link

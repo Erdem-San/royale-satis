@@ -37,6 +37,7 @@ export default async function Header() {
                     key={user?.id || 'guest'}
                     initialUser={user}
                     initialIsAdmin={isAdmin}
+                    categories={categories}
                 />
             </Suspense>
             <Suspense fallback={<div className="bg-[#252830] h-12"></div>}>

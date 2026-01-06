@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function TopBar() {
     return (
-        <div className="flex flex-col w-full">
+        <div className="hidden lg:flex flex-col w-full">
             {/* Top Strip - Üst ince şerit */}
             <div className="bg-[#252830] border-b border-[#1a1b1e] py-1.5">
                 <div className="container mx-auto px-4">

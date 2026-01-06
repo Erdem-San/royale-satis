@@ -164,8 +164,8 @@ export default async function HomePage() {
               <p className="text-gray-400 text-sm">En popüler ve özel seçilmiş ürünler</p>
             </div>
 
-            {/* Featured Items Grid - Same as Category Page */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {/* Featured Items Grid - 2 cols mobile, 3 tablet, 4 desktop */}
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {featuredItems.map((item) => (
                 <ItemCard key={item.id} item={item} />
               ))}
