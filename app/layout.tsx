@@ -5,6 +5,7 @@ import ProgressBar from "@/components/ProgressBar";
 import { headers } from "next/headers";
 import "./globals.css";
 import "./nprogress.css";
+import "quill/dist/quill.snow.css";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
