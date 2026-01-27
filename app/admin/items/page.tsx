@@ -107,7 +107,7 @@ export default function AdminItemsPage() {
           className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
         >
           <Plus className="mr-2 h-4 w-4" />
-          Yeni Yazı
+          Yeni Ürün
         </Link>
       </div>
 

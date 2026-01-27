@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { CartProvider } from "@/contexts/CartContext";
 import ProgressBar from "@/components/ProgressBar";
 import { headers } from "next/headers";
@@ -16,10 +16,11 @@ export const metadata: Metadata = {
   description: "Metin2 ve Royale Online için güvenilir item ve yang satış platformu",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
+  variable: "--font-outfit",
   display: "swap",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export default async function RootLayout({
@@ -29,7 +30,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="tr" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased min-h-screen flex flex-col bg-[#1a1b1e]`}>
+      <body className={`${outfit.className} antialiased min-h-screen flex flex-col bg-[#1a1b1e]`}>
         <CartProvider>
           <ProgressBar />
           {children}

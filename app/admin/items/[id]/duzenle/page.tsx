@@ -26,9 +26,11 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
     .order('name')
 
   return (
-    <div className="max-w-4xl">
-      <h1 className="text-3xl font-bold text-white mb-8">Ürün Düzenle</h1>
-      <ItemForm categories={categories || []} item={item} />
+    <div className="py-4">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 space-y-6">
+        <h2 className="text-2xl font-semibold text-white">Ürün Düzenle</h2>
+        <ItemForm categories={categories || []} item={item} />
+      </div>
     </div>
   )
 }

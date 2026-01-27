@@ -45,6 +45,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     `)
         .or(`name.ilike.%${q}%,description.ilike.%${q}%`)
         .order('created_at', { ascending: false })
+        .returns<any[]>()
 
     return (
         <div className="min-h-screen bg-[#1a1b1e] py-8">

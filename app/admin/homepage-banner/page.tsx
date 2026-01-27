@@ -10,6 +10,7 @@ export default async function AdminHomepageBannerPage() {
     .from('homepage_banner')
     .select('*')
     .order('created_at', { ascending: false })
+    .returns<any[]>()
 
   const activeBanner = banners?.find(b => b.is_active)
 
@@ -21,13 +22,6 @@ export default async function AdminHomepageBannerPage() {
           <h2 className="text-2xl font-semibold text-white">
             Anasayfa Banner Yönetimi
           </h2>
-          <Link
-            href="/admin/blog/posts"
-            className="inline-flex items-center rounded-md bg-[#252830] px-4 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-[#2a2d35] border border-gray-700"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Geri
-          </Link>
         </div>
 
         {error && (

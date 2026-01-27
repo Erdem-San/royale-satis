@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import CartBadge from '@/components/cart/CartBadge'
 import type { User } from '@supabase/supabase-js'
 import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
 
 interface MainHeaderClientProps {
     initialUser: User | null
@@ -88,9 +89,10 @@ export default function MainHeaderClient({ initialUser, initialIsAdmin, categori
 
                             <Link href="/" className="flex items-center gap-2 mr-2">
                                 <div className="relative flex items-center">
+                                    <Image src="/dio-logo.png" alt="Logo" width={50} height={50} />
                                     <span className="text-2xl md:text-3xl font-black tracking-tighter text-white" style={{ fontFamily: 'Arial Black, sans-serif' }}>
-                                        <span className="text-green-500 italic">Dio</span>
-                                        <span className="text-white italic">pazar</span>
+                                        <span className="text-[#27bc66] italic">Dio</span>
+                                        <span className="text-gray-100 italic">pazar</span>
                                     </span>
                                 </div>
                             </Link>
@@ -143,12 +145,12 @@ export default function MainHeaderClient({ initialUser, initialIsAdmin, categori
                                     </Link>
 
                                     {isAdmin && (
-                                        <Link
+                                        <a
                                             href="/admin"
                                             className="px-4 h-10 flex items-center justify-center bg-yellow-600 text-white rounded-lg font-bold hover:bg-yellow-700 text-sm transition-colors"
                                         >
                                             Admin
-                                        </Link>
+                                        </a>
                                     )}
 
                                     <button

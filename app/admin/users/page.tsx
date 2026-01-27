@@ -247,8 +247,8 @@ export default function AdminUsersPage() {
             <button
               onClick={() => setIsCreating(!isCreating)}
               className={`inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors ${isCreating
-                  ? 'bg-red-600 hover:bg-red-500'
-                  : 'bg-blue-600 hover:bg-blue-500'
+                ? 'bg-red-600 hover:bg-red-500'
+                : 'bg-blue-600 hover:bg-blue-500'
                 }`}
             >
               {isCreating ? (

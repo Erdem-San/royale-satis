@@ -125,11 +125,8 @@ function RichTextEditor({
       });
     };
 
-    // Import Quill CSS and initialize
-    Promise.all([
-      import('quill/dist/quill.snow.css'),
-      initQuill()
-    ]);
+    // Initialize Quill
+    initQuill();
 
     return () => {
       // Properly cleanup Quill instance
