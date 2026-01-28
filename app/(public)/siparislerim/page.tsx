@@ -9,7 +9,7 @@ export default async function OrdersPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/giris?redirect=/siparislerim')
+    redirect('/auth/login?redirect=/siparislerim')
   }
 
   const { data: orders, error } = await supabase

@@ -8,7 +8,7 @@ export default async function PaymentPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/giris?redirect=/odeme')
+    redirect('/auth/login?redirect=/odeme')
   }
 
   return (
